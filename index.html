@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Document</title>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/vs.min.css">
+<style>
+body {
+  background-color: #f1f0f1;
+  height: 100vh; /* bodyの高さを明示的に指定する */
+}
+code {
+  display: inline-block;
+  padding: 0.1em 0.25em; /* 文字周りの余白 */
+  color: #444; /* 文字色 */
+  background-color: #e7edf3; /* 背景色 */
+  border-radius: 3px; /* 角丸 */
+  border: solid 1px #d6dde4; /* 枠線 */
+}
+h4 {
+  padding: 0.25em 0.5em;/*上下 左右の余白*/
+  color: #494949;/*文字色*/
+  background: transparent;/*背景透明に*/
+  border-left: solid 5px #7db4e6;/*左線*/
+}
+.container {
+  width: 100%;
+  background-color: white;
+  margin: 5px;
+  border-radius: 10px;
+  border-color: #e5e4e5;
+  box-shadow: 2px 2px 4px #e5e4e5;
+}
+#mainContainer {
+  height: 80%;
+  white-space: nowrap;
+  overflow: scroll;
+}
+#paragraphContainer {
+  height: fit-content;
+  white-space: pre-wrap; /* 改行と余白を保持 */
+  word-wrap: break-word; /* 単語の途中で改行を許可 */
+}
+.themeBox {
+  display: inline-block;
+  height: 98%;
+  /*width: body * 25%;*/
+  background-color: #dcdcdc;
+  margin: 3px;
+  border-radius: 5px;
+}
+.thumbnailBox {
+  width: 90%;
+  height: fit-content;
+  aspect-ratio: 1/1;
+  /*background-color: lightgreen;*/
+  margin: 5px;
+  position: relative;
+}
+.thumbnailImage {
+  width: 100%;
+  height: 100%;
+}
+.thumbnailName {
+  background-color: black;
+  opacity: 0.65;
+  text-align: center;
+  font-size: 3vw;
+  /*font-size: clamp(px, vw, 16px);*/
+color: white;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+}
+.cardBox {
+  width: 90%;
+  height: 80%;
+  background-color: lightyellow;
+  margin: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  overflow: scroll;
+}
+.card {
+  width: 50%;
+  aspect-ratio: 59 / 86;
+  display: inline-block;
+}
+.inlineCard {
+  width: 40px;
+  aspect-ratio: 59 / 86;
+}
+</style>
+</head>
+<body>
+<div class='container' id='mainContainer'>
+<!--<div class='themeBox'>-->
+<!--  <div class='thumbnailBox'>-->
+<!--    <img class='thumbnailImage' src='sample'>-->
+<!--    <div class='thumbnailBar'></div>-->
+<!--    <p class='thumbnailName'>名前</p>-->
+<!--  </div>-->
+<!--  <div class='cardBox'>-->
+<!--    <img src='sample1'>-->
+<!--    <img src='sample2'>      -->
+<!--    <img src='sample3'>      -->
+<!--  </div>-->
+<!--</div>-->
+</div>
+<div class='container' id='paragraphContainer'>
+
+<details>
+<summary>更新履歴</summary>
+2024/08/25 9:00 草稿を公開しました
+</details>
+
+こんにちは、遊戯王プレイヤーのmira（@mirayugioh）です🙌
+遊戯王の手札誘発を99.9%網羅したので共有したいと思います💪
+
+<h4>きっかけ</h4>
+大会で《sophiaの影霊衣》<img class='inlineCard' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRB3stliLzCGFx_uYl8hrBD5RmOdaBiQDyFtA&usqp=CAU'>を使ってみたという投稿に出会いました。
+<blockquote>
+「影霊衣」儀式魔法カードにより降臨。
+それぞれ種族の異なる自分フィールドのモンスター３体を使用した手札からの儀式召喚でしか特殊召喚できない。
+<strong>
+①：自分・相手のメインフェイズ１に手札からこのカードと「影霊衣」魔法カード１枚を捨てて発動できる。
+そのフェイズの間、相手はエクストラデッキからモンスターを特殊召喚できない。
+</strong>
+②：このカードが儀式召喚に成功した時に発動できる。
+このカード以外のお互いのフィールド・墓地のカードを全て除外する。
+この効果を発動するターン、自分は他のモンスターを通常召喚・特殊召喚できない。
+</blockquote>
+条件は少し厳しいですが、相手の行動を1ターン封じることができるものです。
+こんなカードがあったのか...驚くと同時に、
+似たようなカードがあるんじゃないかと思ったわけです。
+遊戯王の手札誘発を完全網羅したものが欲しいと。
+さすがに100%とまではいかなくても、マイナーどころの手札誘発をもっと知りたいなと。
+
+<h4>方法</h4>
+手札誘発と疑われるカードを1枚ずつ閲覧して判定します。
+
+<h4>詳細</h4>
+どんなカードが手札誘発と思われるのか🤔
+手札誘発は手札で効果を発揮するため、テキスト欄に必ず「手札」と書かれます。
+遊戯王カードデータベース様（ocg-card.com）の情報を拝借し、
+「カードテキストを検索」を選び、検索ボックスに「手札」と入力。
+通常モンスター、融合モンスター、エクシーズ、シンクロ、リンクは除きます。
+100件ずつ表示し、発売日が新しい順に並び替え。
+2024/08/25 8:00現在、3,189件ヒットしました。
+一番新しいのは《アイス・ライゼオル》です。
+<a href="https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=1&amp;sess=1&amp;rp=100&amp;mode=&amp;sort=21&amp;keyword=%E6%89%8B%E6%9C%AD&amp;stype=2&amp;ctype=&amp;othercon=2&amp;other=1&amp;jogai=0&amp;jogai=2&amp;jogai=9&amp;jogai=10&amp;jogai=17&amp;starfr=&amp;starto=&amp;pscalefr=&amp;pscaleto=&amp;linkmarkerfr=&amp;linkmarkerto=&amp;link_m=2&amp;atkfr=&amp;atkto=&amp;deffr=&amp;defto=&amp;releaseDStart=1&amp;releaseMStart=1&amp;releaseYStart=1999&amp;releaseDEnd=&amp;releaseMEnd=&amp;releaseYEnd=&amp;request_locale=ja">https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=1&amp;sess=1&amp;rp=100&amp;mode=&amp;sort=21&amp;keyword=%E6%89%8B%E6%9C%AD&amp;stype=2&amp;ctype=&amp;othercon=2&amp;other=1&amp;jogai=0&amp;jogai=2&amp;jogai=9&amp;jogai=10&amp;jogai=17&amp;starfr=&amp;starto=&amp;pscalefr=&amp;pscaleto=&amp;linkmarkerfr=&amp;linkmarkerto=&amp;link_m=2&amp;atkfr=&amp;atkto=&amp;deffr=&amp;defto=&amp;releaseDStart=1&amp;releaseMStart=1&amp;releaseYStart=1999&amp;releaseDEnd=&amp;releaseMEnd=&amp;releaseYEnd=&amp;request_locale=ja</a>
+これらのカードを1枚ずつ判定していきます。
+
+なお、無限泡影などの手札から発動できる罠は後回しにします。
+事前に遊戯王カードwiki様の《デルタ・クロウ－アンチ・リバース》ページを参考にしてリスト化しておきました。
+
+<details>
+《拮抗勝負》
+《幻煌龍の浸渦》
+《幻煌龍の戦渦》
+《幻煌龍の天渦》
+《セフィラの星戦》
+《タイフーン》
+《タキオン・ギャラクシースパイラル》
+《デルタ・クロウ－アンチ・リバース》
+《霊王の波動》
+《聖王の粉砕》
+《ＮＥＸＴ》
+《ハーピィの羽根吹雪》
+《ブラック・ソニック》
+《ＢＦ－ツインシャドウ》
+《海晶乙女波動》
+《海晶乙女瀑布》
+《海晶乙女潮流》
+《海晶乙女環流》
+《無限泡影》
+《ロード・オブ・ザ・タキオンギャラクシー》
+《タキオン・トランスミグレイション》
+《ブラック・バード・クローズ》
+《レッド・リブート》
+</details>
+
+<h4>カード情報取得方法</h4>
+
+ページを解析すると、カードデータのHTML構造は次のようになっています。
+
+<details>
+
+灰流うらら
+<pre>
+<code>
+&lt;div class=&quot;t_row c_normal open&quot;&gt;
+  &lt;div class=&quot;box_card_img&quot;&gt;
+    &lt;img id=&quot;card_image_0_1&quot; alt=&quot;灰流うらら&quot; title=&quot;灰流うらら&quot; class=&quot;none ui-draggable ui-draggable-handle&quot; style=&quot;position: relative; display: inline;&quot; src=&quot;/yugiohdb/get_image.action?type=1&amp;osplang=1&amp;cid=12950&amp;ciid=1&amp;enc=by_I8OcuAqgJpPjaezbcNg&quot;&gt;
+  &lt;/div&gt;
+  &lt;dl class=&quot;flex_1&quot;&gt;
+    &lt;dd class=&quot;box_card_name flex_1 top_set&quot;&gt;
+      &lt;span class=&quot;card_ruby&quot;&gt;はるうらら&lt;/span&gt;
+      &lt;span class=&quot;card_name&quot;&gt;灰流うらら&lt;/span&gt;
+    &lt;/dd&gt;
+    &lt;dd class=&quot;icon top_set top_b_none&quot;&gt;
+    &lt;/dd&gt;
+    &lt;dd class=&quot;remove_btn top_set&quot;&gt;
+      &lt;a href=&quot;javascript:void(0);&quot; class=&quot;btn hex red&quot; title=&quot;このカードをリストから削除&quot;&gt;
+        &lt;span&gt;X&lt;/span&gt;
+        &lt;input type=&quot;hidden&quot; class=&quot;lang&quot; value=&quot;&quot;&gt;
+        &lt;input type=&quot;hidden&quot; class=&quot;cid&quot; value=&quot;12950&quot;&gt;
+      &lt;/a&gt;
+    &lt;/dd&gt;
+    &lt;dd class=&quot;box_card_spec flex_1&quot;&gt;
+      &lt;span class=&quot;box_card_attribute&quot;&gt;
+        &lt;img class=&quot;icon_img ui-draggable ui-draggable-handle&quot; src=&quot;external/image/parts/attribute/attribute_icon_fire.png&quot; alt=&quot;炎属性&quot; title=&quot;炎属性&quot; style=&quot;position: relative;&quot;&gt;
+        &lt;span&gt;炎属性&lt;/span&gt;
+      &lt;/span&gt;
+      &lt;span class=&quot;box_card_level_rank level&quot;&gt;
+        &lt;img class=&quot;icon_img ui-draggable ui-draggable-handle&quot; src=&quot;external/image/parts/icon_level.png&quot; alt=&quot;レベル&quot; title=&quot;レベル&quot; style=&quot;position: relative;&quot;&gt;
+        &lt;span&gt;レベル 3&lt;/span&gt;
+      &lt;/span&gt;
+      &lt;span class=&quot;card_info_species_and_other_item&quot;&gt;
+        &lt;span&gt;【 アンデット族 ／ チューナー ／ 効果 】&lt;/span&gt;
+      &lt;/span&gt;
+      &lt;span class=&quot;atk_power&quot;&gt;
+        &lt;span&gt;攻撃力 0&lt;/span&gt;
+      &lt;/span&gt;
+      &lt;span class=&quot;def_power&quot;&gt;
+        &lt;span&gt;守備力 1800&lt;/span&gt;
+      &lt;/span&gt;
+    &lt;/dd&gt;
+    &lt;dd class=&quot;box_card_text c_text flex_1&quot;&gt;このカード名の効果は１ターンに１度しか使用できない。
+      &lt;br&gt;①：以下のいずれかの効果を含む魔法・罠・モンスターの効果が発動した時、このカードを手札から捨てて発動できる。その効果を無効にする。
+      &lt;br&gt;●デッキからカードを手札に加える効果
+      &lt;br&gt;●デッキからモンスターを特殊召喚する効果
+      &lt;br&gt;●デッキからカードを墓地へ送る効果&lt;/dd&gt;
+  &lt;/dl&gt;
+  &lt;input type=&quot;hidden&quot; class=&quot;cnm&quot; value=&quot;灰流うらら&quot;&gt;
+  &lt;input type=&quot;hidden&quot; class=&quot;fltype&quot; value=&quot;&quot;&gt;
+  &lt;input type=&quot;hidden&quot; class=&quot;link_value&quot; value=&quot;/yugiohdb/card_search.action?ope=2&amp;cid=12950&quot;&gt;
+&lt;/div&gt;
+</code>
+</pre>
+
+
+sophiaのネクロス
+<pre>
+<code class="html">
+&lt;div class=&quot;t_row c_normal open&quot;&gt;
+  &lt;div class=&quot;box_card_img&quot;&gt;
+    &lt;img id=&quot;card_image_0_1&quot; alt=&quot;sophiaの影霊衣&quot; title=&quot;sophiaの影霊衣&quot; class=&quot;none ui-draggable ui-draggable-handle&quot; style=&quot;position: relative; display: inline;&quot; src=&quot;/yugiohdb/get_image.action?type=1&amp;osplang=1&amp;cid=11713&amp;ciid=1&amp;enc=GACjCouR9LPfcCpUEpgo-Q&quot;&gt;
+  &lt;/div&gt;
+  &lt;dl class=&quot;flex_1&quot;&gt;
+    &lt;dd class=&quot;box_card_name flex_1 top_set&quot;&gt;
+      &lt;span class=&quot;card_ruby&quot;&gt;ソピアのネクロス&lt;/span&gt;
+      &lt;span class=&quot;card_name&quot;&gt;sophiaの影霊衣&lt;/span&gt;
+    &lt;/dd&gt;
+    &lt;dd class=&quot;icon top_set top_b_none&quot;&gt;
+    &lt;/dd&gt;
+    &lt;dd class=&quot;remove_btn top_set&quot;&gt;
+      &lt;a href=&quot;javascript:void(0);&quot; class=&quot;btn hex red&quot; title=&quot;このカードをリストから削除&quot;&gt;
+        &lt;span&gt;X&lt;/span&gt;
+        &lt;input type=&quot;hidden&quot; class=&quot;lang&quot; value=&quot;&quot;&gt;
+        &lt;input type=&quot;hidden&quot; class=&quot;cid&quot; value=&quot;11713&quot;&gt;
+      &lt;/a&gt;
+    &lt;/dd&gt;
+    &lt;dd class=&quot;box_card_spec flex_1&quot;&gt;
+      &lt;span class=&quot;box_card_attribute&quot;&gt;
+        &lt;img class=&quot;icon_img ui-draggable ui-draggable-handle&quot; src=&quot;external/image/parts/attribute/attribute_icon_light.png&quot; alt=&quot;光属性&quot; title=&quot;光属性&quot; style=&quot;position: relative;&quot;&gt;
+        &lt;span&gt;光属性&lt;/span&gt;
+      &lt;/span&gt;
+      &lt;span class=&quot;box_card_level_rank level&quot;&gt;
+        &lt;img class=&quot;icon_img ui-draggable ui-draggable-handle&quot; src=&quot;external/image/parts/icon_level.png&quot; alt=&quot;レベル&quot; title=&quot;レベル&quot; style=&quot;position: relative;&quot;&gt;
+        &lt;span&gt;レベル 11&lt;/span&gt;
+      &lt;/span&gt;
+      &lt;span class=&quot;card_info_species_and_other_item&quot;&gt;
+        &lt;span&gt;【 魔法使い族 ／ 儀式 ／ 効果 】&lt;/span&gt;
+      &lt;/span&gt;
+      &lt;span class=&quot;atk_power&quot;&gt;
+        &lt;span&gt;攻撃力 3600&lt;/span&gt;
+      &lt;/span&gt;
+      &lt;span class=&quot;def_power&quot;&gt;
+        &lt;span&gt;守備力 3400&lt;/span&gt;
+      &lt;/span&gt;
+    &lt;/dd&gt;
+    &lt;dd class=&quot;box_card_text c_text flex_1&quot;&gt;「影霊衣」儀式魔法カードにより降臨。それぞれ種族の異なる自分フィールドのモンスター３体を使用した手札からの儀式召喚でしか特殊召喚できない。①：自分・相手のメインフェイズ１に手札からこのカードと「影霊衣」魔法カード１枚を捨てて発動できる。そのフェイズの間、相手はエクストラデッキからモンスターを特殊召喚できない。②：このカードが儀式召喚に成功した時に発動できる。このカード以外のお互いのフィールド・墓地のカードを全て除外する。この効果を発動するターン、自分は他のモンスターを通常召喚・特殊召喚できない。&lt;/dd&gt;
+  &lt;/dl&gt;
+  &lt;input type=&quot;hidden&quot; class=&quot;cnm&quot; value=&quot;sophiaの影霊衣&quot;&gt;
+  &lt;input type=&quot;hidden&quot; class=&quot;fltype&quot; value=&quot;&quot;&gt;
+  &lt;input type=&quot;hidden&quot; class=&quot;link_value&quot; value=&quot;/yugiohdb/card_search.action?ope=2&amp;cid=11713&quot;&gt;
+&lt;/div&gt;
+
+</code>
+</pre>
+
+アストログラフ・マジシャン
+<pre>
+<code class="html">
+&lt;div class=&quot;t_row c_normal open&quot;&gt;
+  &lt;div class=&quot;box_card_img&quot;&gt;
+    &lt;img id=&quot;card_image_0_1&quot; alt=&quot;アストログラフ・マジシャン&quot; title=&quot;アストログラフ・マジシャン&quot; class=&quot;none ui-draggable ui-draggable-handle&quot; style=&quot;position: relative; display: inline;&quot; src=&quot;/yugiohdb/get_image.action?type=1&amp;osplang=1&amp;cid=12906&amp;ciid=1&amp;enc=VA8kjHnV4aBfjuU1HUxvaw&quot;&gt;
+  &lt;/div&gt;
+  &lt;dl class=&quot;flex_1&quot;&gt;
+    &lt;dd class=&quot;box_card_name flex_1 top_set&quot;&gt;
+      &lt;span class=&quot;card_ruby&quot;&gt;アストログラフ・マジシャン&lt;/span&gt;
+      &lt;span class=&quot;card_name&quot;&gt;アストログラフ・マジシャン&lt;/span&gt;
+    &lt;/dd&gt;
+    &lt;dd class=&quot;icon top_set top_b_none&quot;&gt;
+      &lt;div class=&quot;lr_icon fl fl_2&quot;&gt;
+        &lt;p&gt;制限&lt;/p&gt;
+        &lt;span&gt;制限&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/dd&gt;
+    &lt;dd class=&quot;remove_btn top_set&quot;&gt;
+      &lt;a href=&quot;javascript:void(0);&quot; class=&quot;btn hex red&quot; title=&quot;このカードをリストから削除&quot;&gt;
+        &lt;span&gt;X&lt;/span&gt;
+        &lt;input type=&quot;hidden&quot; class=&quot;lang&quot; value=&quot;&quot;&gt;
+        &lt;input type=&quot;hidden&quot; class=&quot;cid&quot; value=&quot;12906&quot;&gt;
+      &lt;/a&gt;
+    &lt;/dd&gt;
+    &lt;dd class=&quot;box_card_spec flex_1&quot;&gt;
+      &lt;span class=&quot;box_card_attribute&quot;&gt;
+        &lt;img class=&quot;icon_img ui-draggable ui-draggable-handle&quot; src=&quot;external/image/parts/attribute/attribute_icon_dark.png&quot; alt=&quot;闇属性&quot; title=&quot;闇属性&quot; style=&quot;position: relative;&quot;&gt;
+        &lt;span&gt;闇属性&lt;/span&gt;
+      &lt;/span&gt;
+      &lt;span class=&quot;box_card_level_rank level&quot;&gt;
+        &lt;img class=&quot;icon_img ui-draggable ui-draggable-handle&quot; src=&quot;external/image/parts/icon_level.png&quot; alt=&quot;レベル&quot; title=&quot;レベル&quot; style=&quot;position: relative;&quot;&gt;
+        &lt;span&gt;レベル 7&lt;/span&gt;
+      &lt;/span&gt;
+      &lt;span class=&quot;card_info_species_and_other_item&quot;&gt;
+        &lt;span&gt;【 魔法使い族 ／ ペンデュラム ／ 効果 】&lt;/span&gt;
+      &lt;/span&gt;
+      &lt;span class=&quot;atk_power&quot;&gt;
+        &lt;span&gt;攻撃力 2500&lt;/span&gt;
+      &lt;/span&gt;
+      &lt;span class=&quot;def_power&quot;&gt;
+        &lt;span&gt;守備力 2000&lt;/span&gt;
+      &lt;/span&gt;
+    &lt;/dd&gt;
+    &lt;dd class=&quot;box_card_pen_info flex_1&quot;&gt;
+      &lt;span class=&quot;box_card_pen_scale&quot;&gt;
+        &lt;img class=&quot;icon_img ui-draggable ui-draggable-handle&quot; src=&quot;external/image/parts/icon_pendulum.png&quot; alt=&quot;ペンデュラムスケール&quot; title=&quot;ペンデュラムスケール&quot; style=&quot;position: relative;&quot;&gt;Pスケール 1&lt;/span&gt;
+      &lt;span class=&quot;box_card_pen_effect c_text flex_1&quot;&gt;このカード名のP効果は１ターンに１度しか使用できない。
+        &lt;br&gt;①：自分メインフェイズに発動できる。このカードを破壊し、手札・デッキから「星読みの魔術師」１体を選び、自分のPゾーンに置くか特殊召喚する。&lt;/span&gt;
+    &lt;/dd&gt;
+    &lt;dd class=&quot;box_card_text c_text flex_1&quot;&gt;①：自分フィールドのカードが戦闘・効果で破壊された場合に発動できる。このカードを手札から特殊召喚する。その後、このターンに破壊された自分か相手のモンスター１体を選び、その同名モンスター１体をデッキから手札に加える事ができる。
+      &lt;br&gt;②：自分の手札・フィールド・墓地の、「ペンデュラム・ドラゴン」「エクシーズ・ドラゴン」「シンクロ・ドラゴン」「フュージョン・ドラゴン」モンスター１体ずつと、フィールドのこのカードを除外して発動できる。「覇王龍ズァーク」１体を融合召喚扱いでEXデッキから特殊召喚する。&lt;/dd&gt;
+  &lt;/dl&gt;
+  &lt;input type=&quot;hidden&quot; class=&quot;cnm&quot; value=&quot;アストログラフ・マジシャン&quot;&gt;
+  &lt;input type=&quot;hidden&quot; class=&quot;fltype&quot; value=&quot;2&quot;&gt;
+  &lt;input type=&quot;hidden&quot; class=&quot;link_value&quot; value=&quot;/yugiohdb/card_search.action?ope=2&amp;cid=12906&quot;&gt;
+&lt;/div&gt;
+
+</code>
+</pre>
+
+</details>
+
+普通の効果モンスター、儀式モンスター、ペンデュラムモンスターのそれぞれにおいてタグのクラス名等が変動しないことがわかります。
+この情報からカード名、モンスター効果、種族等を取得します。
+
+JavaScriptのブックマークレットを使って抽出します。
+
+<h4>使用したブックマークレット</h4>
+
+<details>
+
+<pre>
+<code class='js'>
+
+javascript:(function() {
+  const bodyElement = document.documentElement.outerHTML;
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(bodyElement, 'text/html');
+  const getCardName = (parent) => {
+    const flex_1 = parent.querySelector('.flex_1');
+    const box_card_name_flex_1_top_set = flex_1.querySelector('.box_card_name.flex_1.top_set');
+    const card_name = box_card_name_flex_1_top_set.querySelector('.card_name');
+    return card_name.textContent.trim();
+  };
+  const getDetail = (parent) => {
+    const flex_1 = parent.querySelector('.flex_1');
+    const box_card_spec_flex_1 = flex_1.querySelector('.box_card_spec.flex_1');
+    const card_info_species_and_other_item = box_card_spec_flex_1.querySelector('.card_info_species_and_other_item');
+    const span = card_info_species_and_other_item.querySelector('span');
+    return span.textContent.replace(/\s+/g, ' ').trim();
+  };
+  const getEffect = (parent) => {
+    const flex_1 = parent.querySelector('.flex_1');
+    const box_card_text_c_text_flex_1 = flex_1.querySelector('.box_card_text.c_text.flex_1');
+    return box_card_text_c_text_flex_1.textContent.trim();
+  };
+  let resultJson = [];
+  const searchResultCards = doc.querySelectorAll('.t_row.c_normal.open');
+  for (const searchResultCard of searchResultCards) {
+    resultJson.push({ 
+      name: getCardName(searchResultCard)
+      , detail: getDetail(searchResultCard)
+      , effect: getEffect(searchResultCard) 
+    });
+  }
+  const textArea = document.createElement('textarea');
+  textArea.value = JSON.stringify(resultJson, null, 2);;
+  document.body.appendChild(textArea);
+  textArea.style.position = 'fixed';
+  textArea.style.top = 0;
+  textArea.style.left = 0;
+  textArea.style.width = '2em';
+  textArea.style.height = '2em';
+  textArea.style.padding = 0;
+  textArea.style.border = 'none';
+  textArea.style.outline = 'none';
+  textArea.style.boxShadow = 'none';
+  textArea.style.background = 'transparent';
+  textArea.select();
+  document.execCommand('copy');
+  document.body.removeChild(textArea);
+  alert('copied to clipboard');
+})();
+
+
+</code>
+</pre>
+
+</details>
+
+<h4>判定方法</h4>
+目視で行うのはミスを招きやすいため、
+JavaScript（ブラウザ）を使って効率化を試みます。
+まず高確率で手札誘発じゃないものは早めに取り除きます。
+ペンデュラムモンスター、儀式モンスターですね。
+次にテキスト欄に「特殊召喚」と書かれたカードを分類します。
+
+
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+<script>
+hljs.initHighlightingOnLoad();
+const mainContainer = document.getElementById('mainContainer');
+const createThemeBox = (thumbnailNameValue, thumbnailImageUrl, themeCards) => {
+const themeBox = document.createElement('div');
+mainContainer.appendChild(themeBox);
+themeBox.classList.add('themeBox');
+const themeBoxWidth = `${document.body.clientWidth * 0.25}px`;
+themeBox.style.width = themeBoxWidth;
+console.log(`ボックスの横幅は${themeBoxWidth}pxになりました。`);
+//サムネイルボックスを作る
+const thumbnailBox = document.createElement('div');
+thumbnailBox.classList.add('thumbnailBox');
+const thumbnailImage = document.createElement('img');
+thumbnailImage.classList.add('thumbnailImage');
+thumbnailImage.src = thumbnailImageUrl;
+thumbnailBox.appendChild(thumbnailImage);
+thumbnailImage.onload = () => {
+  //イラスト部分をくり抜いてリサイズする
+  const cardOriginalWidth = thumbnailImage.width;
+  const cardOriginalHeight = thumbnailImage.height;
+  console.log(`元画像の横幅は${cardOriginalWidth}pxで縦幅は${cardOriginalHeight}pxです`);
+  const illustWidth = cardOriginalWidth * 0.76; //イラスト枠の横幅
+  const illustHeight = cardOriginalHeight * 0.52; //イラスト枠の縦幅
+  console.log(`イラスト枠の横幅は${illustWidth}pxで縦幅は${illustHeight}pxです`);
+  thumbnailImage.width = illustWidth;
+  thumbnailImage.height = illustHeight;
+  thumbnailImage.style.objectFit = 'none';
+  thumbnailImage.style.objectPosition = '45% 40%'; //イラスト枠を綺麗に切り取りたい
+  const reductionRate = parseFloat(themeBoxWidth) / illustWidth;
+  thumbnailImage.style.zoom = `${reductionRate}`;
+  console.log(`切り抜き画像を${reductionRate}倍に拡大縮小しました`);
+  //分類名を入れる
+  const thumbnailName = document.createElement('p');
+  thumbnailName.classList.add('thumbnailName');
+  thumbnailName.textContent = thumbnailNameValue;
+  thumbnailBox.appendChild(thumbnailName);
+  themeBox.appendChild(thumbnailBox);
+  //カードボックスを作る
+  const cardBox = document.createElement('div');
+  cardBox.classList.add('cardBox');
+  const images = themeCards;
+  for (const image of images) {
+  const img = document.createElement('img');
+  img.classList.add('card')
+  img.src = image.cardImageUrl;
+  cardBox.appendChild(img);
+  };
+    themeBox.appendChild(cardBox);
+  }
+}
+
+//無効系
+createThemeBox(
+'無効系',
+'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzgwdlqGQDfCu7oKH2WMFTOjn7IGJq4aNFxuWOfXO0dMhl2nclCfacpuf9&s=10',
+[{
+"name": "灰流うらら", "text": "このカード名の効果は１ターンに１度しか使用できない。①：以下のいずれかの効果を含む魔法・罠・モンスターの効果が発動した時、このカードを手札から捨てて発動できる。その効果を無効にする。●デッキからカードを手札に加える効果●デッキからモンスターを特殊召喚する効果●デッキからカードを墓地へ送る効果", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/灰流うらら.png"
+},
+{
+"name": "PSYフレームギア・γ", "text": "このカードは通常召喚できず、カードの効果でのみ特殊召喚できる。①：自分フィールドにモンスターが存在せず、相手モンスターの効果が発動した時に発動できる。手札のこのカードと自分の手札・デッキ・墓地の「PSYフレーム・ドライバー」１体を選んで特殊召喚し、その発動を無効にし破壊する。この効果で特殊召喚したモンスターは全てエンドフェイズに除外される。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/PSYフレームギア・γ.png"
+},
+{
+"name": "エフェクト・ヴェーラー", "text": "①：相手メインフェイズに、このカードを手札から墓地へ送り、相手フィールドの効果モンスター１体を対象として発動できる。その相手モンスターの効果をターン終了時まで無効にする。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/エフェクト・ヴェーラー.png"
+},
+{
+"name": "無限泡影", "text": "自分フィールドにカードが存在しない場合、このカードの発動は手札からもできる。①：相手フィールドの表側表示モンスター１体を対象として発動できる。そのモンスターの効果をターン終了時まで無効にする。セットされていたこのカードを発動した場合、さらにこのターン中、このカードと同じ縦列の他の魔法・罠カードの効果は無効化される。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/無限泡影.png"
+},
+{
+"name": "朔夜しぐれ", "text": "このカード名の効果は１ターンに１度しか使用できない。①：相手がモンスターを表側表示で特殊召喚した場合、このカードを手札から捨て、その表側表示モンスター１体を対象として発動できる。そのモンスターの効果はターン終了時まで無効化され、このターン中に対象の表側表示モンスターがフィールドから離れた場合、そのコントローラーは対象のモンスターの元々の攻撃力分のダメージを受ける。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/朔夜しぐれ.png"
+},
+{
+"name": "屋敷わらし", "text": "このカード名の効果は１ターンに１度しか使用できない。①：以下のいずれかの効果を含む魔法・罠・モンスターの効果が発動した時、このカードを手札から捨てて発動できる。その発動を無効にする。●墓地からカードを手札・デッキ・EXデッキに加える効果●墓地からモンスターを特殊召喚する効果●墓地からカードを除外する効果", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/屋敷わらし.png"
+},
+{
+"name": "スカル・マイスター", "text": "①：相手の墓地で魔法・罠・モンスターの効果が発動した時、このカードを手札から墓地へ送って発動できる。その効果を無効にする。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/スカル・マイスター.png"
+},
+{
+"name": "朱光の宣告者", "text": "①：相手がモンスターの効果を発動した時、手札からこのカードと天使族モンスター１体を墓地へ送って発動できる。その発動を無効にし破壊する。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/朱光の宣告者.png"
+},
+{
+"name": "古聖戴サウラヴィス", "text": "「精霊の祝福」により降臨①：自分フィールドのモンスターを対象とする魔法・罠・モンスターの効果を相手が発動した時、このカードを手札から捨てて発動できる。その発動を無効にする。②：相手がモンスターを特殊召喚する際に、フィールドのこのカードを手札に戻して発動できる。その特殊召喚を無効にし、そのモンスターを除外する。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/古聖戴サウラヴィス.png"
+},
+{
+"name": "トリシューラの影霊衣", "text": "「影霊衣」儀式魔法カードにより降臨。レベル９以外のモンスターのみを使用した儀式召喚でしか特殊召喚できない。このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：自分フィールドの「影霊衣」モンスターを対象とする魔法・罠・モンスターの効果が発動した時、このカードを手札から捨てて発動できる。その発動を無効にする。②：このカードが儀式召喚に成功した時に発動できる。相手の手札・フィールド・墓地のカードをそれぞれ１枚選び（手札からはランダムに選ぶ）、その３枚を除外する。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/トリシューラの影霊衣.png"
+},
+{
+"name": "紫光の宣告者", "text": "①：相手が罠カードを発動した時、手札からこのカードと天使族モンスター１体を墓地へ送って発動できる。その発動を無効にし破壊する。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/紫光の宣告者.png"
+},
+{
+"name": "緑光の宣告者", "text": "①：相手が魔法カードを発動した時、手札からこのカードと天使族モンスター１体を墓地へ送って発動できる。その発動を無効にし破壊する。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/緑光の宣告者.png"
+},
+{
+"name": "PSYフレームギア・ε", "text": "このカードは通常召喚できず、カードの効果でのみ特殊召喚できる。①：自分フィールドにモンスターが存在せず、相手の罠カードが発動した時に発動できる。手札のこのカードと自分の手札・デッキ・墓地の「PSYフレーム・ドライバー」１体を選んで特殊召喚し、その発動を無効にし破壊する。この効果で特殊召喚したモンスターは全てエンドフェイズに除外される。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/PSYフレームギア・ε.png"
+},
+{
+"name": "PSYフレームギア・δ", "text": "このカードは通常召喚できず、カードの効果でのみ特殊召喚できる。①：自分フィールドにモンスターが存在せず、相手の魔法カードが発動した時に発動できる。手札のこのカードと自分の手札・デッキ・墓地の「PSYフレーム・ドライバー」１体を選んで特殊召喚し、その発動を無効にし破壊する。この効果で特殊召喚したモンスターは全てエンドフェイズに除外される。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/PSYフレームギア・δ.png"
+},
+{
+"name": "墓守の監視者", "text": "相手プレイヤーが自らの手札を捨てる効果を含むカードを発動した時、このカードを手札から墓地に送る事で、その発動と効果を無効にしてそのカードを破壊する。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/墓守の監視者.png"
+},
+{
+"name": "チャウチャウちゃん", "text": "相手モンスターと戦闘を行う自分のモンスターの攻撃宣言時に相手が通常罠カードを発動した時、このカードを手札から捨てて発動できる。その発動を無効にし破壊する。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/チャウチャウちゃん.png"
+},
+{
+"name": "ヂェミナイ・デビル", "text": "自分の手札を捨てる効果を含むカードを相手が発動した時、このカードを手札から墓地に送る事でその発動と効果を無効にし、そのカードを破壊した後自分のデッキからカードを１枚ドローする。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/ヂェミナイ・デビル.png"
+},
+{
+"name": "薔薇の聖弓手", "text": "自分フィールド上に植物族モンスターが存在し、相手が罠カードを発動した時、このカードを手札から墓地へ送って発動できる。その発動を無効にし破壊する。この効果は相手ターンでも発動できる。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/薔薇の聖弓手.png"
+},
+{
+"name": "鉄獣鳥 メルクーリエ", "text": "このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：自分フィールドに「アルバスの落胤」を融合素材とする融合モンスターが存在し、相手がモンスターの効果を発動した時、手札・フィールドのこのカードを墓地へ送って発動できる。その効果を無効にする。②：このカードが除外された場合に発動できる。「鉄獣鳥 メルクーリエ」を除く、「アルバスの落胤」１体またはそのカード名が記されたモンスター１体をデッキから手札に加える。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/鉄獣鳥 メルクーリエ.png"
+},
+{
+"name": "六花のしらひめ", "text": "このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：自分メインフェイズに発動できる。このカードを手札から特殊召喚する。この効果で特殊召喚したこのカードがモンスターゾーンに表側表示で存在する限り、自分は植物族モンスターしか特殊召喚できない。②：自分フィールドに「六花」モンスターが存在し、相手がモンスターの効果を発動した時、手札・墓地のこのカードをデッキに戻し、自分フィールドの植物族モンスター１体をリリースして発動できる。その発動した効果を無効にする。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/六花のしらひめ.png"
+},
+{
+"name": "六花精ヘレボラス", "text": "このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：自分フィールドに「六花」モンスターが存在し、自分フィールドのモンスターを対象とするモンスターの効果を相手が発動した時、手札・フィールドのこのカードをリリースして発動できる。その効果を無効にする。②：このカードが墓地に存在する場合、自分フィールドの植物族モンスター１体をリリースして発動できる。このカードを守備表示で特殊召喚する。この効果で特殊召喚したこのカードは、フィールドから離れた場合に除外される。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/六花精ヘレボラス.png"
+},
+{
+"name": "サブテラーの妖魔", "text": "このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：相手が魔法・罠・モンスターの効果を発動した時、手札・フィールドのこのカードを墓地へ送り、自分フィールドの「サブテラー」モンスター１体を対象として発動できる。その発動を無効にする。その後、対象のモンスターを裏側守備表示にする。②：自分フィールドの表側表示モンスター１体を対象として発動できる。そのモンスターを裏側守備表示にし、自分の手札・墓地の「サブテラー」モンスター１体を選んで表側守備表示または裏側守備表示で特殊召喚する。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/サブテラーの妖魔.png"
+},
+{
+"name": "アヴァロンの魔女モルガン", "text": "このカード名の効果は１ターンに１度しか使用できない。①：自分フィールドに「聖騎士」モンスター及び「聖剣」装備魔法カードが存在し、相手が魔法・罠・モンスターの効果を発動した時、このカードを手札から墓地へ送って発動できる。自分フィールドの「聖剣」装備魔法カード１枚を選んで破壊し、その発動を無効にする。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/アヴァロンの魔女モルガン.png"
+},
+{
+"name": "天威龍－マニラ", "text": "このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：自分フィールドに効果モンスターが存在しない場合に発動できる。このカードを手札から特殊召喚する。②：効果モンスター以外の自分フィールドの表側表示モンスターを対象とする相手の魔法・罠・モンスターの効果が発動した時、手札・墓地のこのカードを除外して発動できる。その発動を無効にし破壊する。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/天威龍－マニラ.png"
+},
+{
+"name": "星杯の守護竜", "text": "このカード名の②の効果は１ターンに１度しか使用できない。①：自分フィールドのリンク状態のモンスターを対象とする魔法・罠・モンスターの効果が発動した時、手札・フィールドのこのカードを墓地へ送って発動できる。その発動を無効にし破壊する。②：墓地のこのカードを除外し、自分の墓地の通常モンスター１体を対象として発動できる。そのモンスターをリンクモンスターのリンク先となる自分フィールドに守備表示で特殊召喚する。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/星杯の守護竜.png"
+},
+{
+"name": "BF－雪撃のチヌーク", "text": "このカード名の効果は１ターンに１度しか使用できない。①：手札・フィールドのこのカードを墓地へ送り、相手フィールドの表側表示モンスター１体を対象として発動できる（自分フィールドに闇属性Sモンスターが存在する場合、この効果は相手ターンでも発動できる）。EXデッキから「BF」Sモンスターか「ブラックフェザー・ドラゴン」１体を墓地へ送り、対象のモンスターはターン終了時まで、攻撃力が７００ダウンし、効果は無効化される。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/BF－雪撃のチヌーク.png"
+},
+{
+"name": "教導の騎士フルルドリス", "text": "このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：EXデッキから特殊召喚されたモンスターがフィールドに存在する場合、自分・相手のメインフェイズに発動できる。このカードを手札から特殊召喚する。自分フィールドに他の「ドラグマ」モンスターが存在する場合、さらにフィールドの表側表示モンスター１体を選んでその効果をターン終了時まで無効にできる。②：自分の「ドラグマ」モンスターの攻撃宣言時に発動できる。自分フィールドの全ての「ドラグマ」モンスターの攻撃力は５００アップする。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/教導の騎士フルルドリス.png"
+},
+{
+"name": "ホーリー・エルフ－ホーリー・バースト・ストリーム", "text": "このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：自分フィールドにレベル５以上の通常モンスターが存在し、相手フィールドのモンスターが効果を発動した時に発動できる。このカードを手札から特殊召喚し、その効果を無効にする。②：相手バトルフェイズに、自分または相手の墓地の通常モンスター１体を対象として発動できる。そのモンスターを自分フィールドに特殊召喚する。このターン、そのモンスターが自分フィールドに存在する限り、攻撃可能な相手モンスターはそのモンスターを攻撃しなければならない。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/ホーリー・エルフ－ホーリー・バースト・ストリーム.png"
+},
+{
+"name": "霊王の波動", "text": "このカード名のカードは１ターンに１枚しか発動できない。相手フィールドにカードが存在する場合、このカードの発動は手札からもできる。①：モンスターを特殊召喚する効果を含む、魔法・罠・モンスターの効果が発動した時に発動できる。その効果を無効にする。自分の墓地に罠カードが存在する場合、さらにその無効にしたカードを破壊する。このカードを手札から発動した場合、発動後、このデュエル中に自分は光・地・風属性モンスターの効果を発動できない。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/霊王の波動.png"
+},
+{
+"name": "聖王の粉砕", "text": "このカード名のカードは１ターンに１枚しか発動できない。相手フィールドにカードが存在する場合、このカードの発動は手札からもできる。①：デッキからカードを手札に加える効果を含む、魔法・罠・モンスターの効果が発動した時に発動できる。その効果を無効にする。自分の墓地に罠カードが存在する場合、さらにその無効にしたカードを破壊する。このカードを手札から発動した場合、発動後、このデュエル中に自分は闇・水・炎属性モンスターの効果を発動できない。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/聖王の粉砕.png"
+},
+{
+"name": "レッド・リブート", "text": "このカードはLPを半分払って手札から発動する事もできる。①：相手が罠カードを発動した時に発動できる。その発動を無効にし、そのカードをそのままセットする。その後、相手はデッキから罠カード１枚を自身の魔法＆罠ゾーンにセットできる。このカードの発動後、ターン終了時まで相手は罠カードを発動できない。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/レッド・リブート.png"
+},
+{
+"name": "ハーピィの羽根吹雪", "text": "自分フィールドに「ハーピィ」モンスターが存在する場合、このカードの発動は手札からもできる。①：自分フィールドに鳥獣族・風属性モンスターが存在する場合に発動できる。ターン終了時まで、相手が発動したモンスターの効果は無効化される。②：魔法＆罠ゾーンのこのカードが相手の効果で破壊された場合に発動できる。自分のデッキ・墓地から「ハーピィの羽根帚」１枚を選んで手札に加える。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/ハーピィの羽根吹雪.png"
+},
+{
+"name": "幻煌龍の浸渦", "text": "フィールドに「海」が存在する場合、このカードの発動は手札からもできる。①：自分フィールドのモンスターが通常モンスターのみの場合、相手フィールドの効果モンスター１体を対象として発動できる。そのモンスターはターン終了時まで、攻撃力・守備力が１０００ダウンし、効果が無効化される。②：墓地のこのカードを除外し、自分フィールドの通常モンスター１体を対象として発動できる。自分の手札・墓地から「幻煌龍」装備魔法カード１枚を選んでその通常モンスターに装備する。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/幻煌龍の浸渦.png"
+},
+{
+"name": "海晶乙女波動", "text": "自分フィールドにリンク３以上の「マリンセス」モンスターが存在する場合、このカードの発動は手札からもできる。①：自分フィールドに「マリンセス」リンクモンスターが存在する場合、相手フィールドの表側表示モンスター１体を対象として発動できる。そのモンスターの効果をターン終了時まで無効にする。自分フィールドにリンク２以上の「マリンセス」モンスターが存在する場合、さらに自分フィールドの全ての表側表示モンスターはターン終了時まで、相手の効果を受けない。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/海晶乙女波動.png"
+},
+{
+"name": "タキオン・トランスミグレイション", "text": "自分フィールドに「ギャラクシーアイズ・タキオン・ドラゴン」モンスターが存在する場合、このカードの発動は手札からもできる。①：自分フィールドに「ギャラクシーアイズ」モンスターが存在する場合、チェーン２以降に発動できる。このカードの発動時に積まれていたチェーン上の、全ての相手のモンスターの効果・魔法・罠カードの発動を無効にし、この効果で発動を無効にしたカードがフィールドに存在していた場合、それらを全てデッキに戻す。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/タキオン・トランスミグレイション.png"
+},
+{
+"name": "ブラック・バード・クローズ", "text": "自分フィールドに「BF」Sモンスターまたは「ブラックフェザー・ドラゴン」が存在する場合、このカードの発動は手札からもできる。①：相手フィールドのモンスターが効果を発動した時、自分フィールドの表側表示の「BF」モンスター１体を墓地へ送って発動できる。その発動を無効にし破壊する。その後、EXデッキから「ブラックフェザー・ドラゴン」１体を特殊召喚できる。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無効系/ブラック・バード・クローズ.png"
+}]
+);
+
+//除去系
+createThemeBox(
+'除去系',
+'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcfAuDnE-rqt5Hui0mWaRPn7-Z9ZoC7QECh8YjLANMijawFjrE7k9Hgdi0&s=10',
+[{
+"name": "幽鬼うさぎ", "text": "このカード名の効果は１ターンに１度しか使用できない。①：フィールドのモンスターの効果が発動した時、またはフィールドの既に表側表示で存在している魔法・罠カードの効果が発動した時、手札・フィールドのこのカードを墓地へ送って発動できる。フィールドのそのカードを破壊する。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/除去系/幽鬼うさぎ.png"
+},
+{
+"name": "原始生命態ニビル", "text": "このカード名の効果は１ターンに１度しか使用できない。①：相手が５体以上のモンスターを召喚・特殊召喚した自分・相手ターンのメインフェイズに発動できる。自分・相手フィールドの表側表示モンスターを可能な限りリリースし、このカードを手札から特殊召喚する。その後、相手フィールドに「原始生命態トークン」（岩石族・光・星１１・攻／守？）１体を特殊召喚する。このトークンの攻撃力・守備力は、この効果でリリースしたモンスターの元々の攻撃力・守備力をそれぞれ合計した数値になる。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/除去系/原始生命態ニビル.png"
+},
+{
+"name": "古尖兵ケルベク", "text": "このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：手札・デッキからカードが相手の墓地へ送られた場合、相手フィールドの特殊召喚されたモンスター１体を対象として発動できる。このカードを手札から特殊召喚する。その後、対象のモンスターを持ち主の手札に戻す。②：このカードが手札・デッキから墓地へ送られた場合に発動できる。お互いのデッキの上からカードを５枚墓地へ送る。その後、自分の墓地に「現世と冥界の逆転」が存在する場合、自分の墓地から罠カード１枚を選んで自分フィールドにセットできる。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/除去系/古尖兵ケルベク.png"
+},
+{
+"name": "タイフーン", "text": "相手フィールドに魔法・罠カードが２枚以上存在し、自分フィールドに魔法・罠カードが存在しない場合、このカードの発動は手札からもできる。①：フィールドの表側表示の魔法・罠カード１枚を対象として発動できる。そのカードを破壊する。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/除去系/タイフーン.png"
+},
+{
+"name": "特異点の悪魔", "text": "このカード名の効果は１ターンに１度しか使用できない。①：相手がモンスターを特殊召喚した時、手札からこのカードと魔法カード１枚を捨てて発動できる。そのモンスターを破壊する。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/除去系/特異点の悪魔.png"
+},
+{
+"name": "ウィッチクラフトゴーレム・アルル", "text": "このカード名の①の効果は１ターンに１度しか使用できない。①：このカードが手札に存在し、自分フィールドの魔法使い族モンスターが相手の効果の対象になった時、または相手モンスターの攻撃対象に選択された時、相手フィールドのカード１枚または自分の墓地の「ウィッチクラフト」魔法カード１枚を対象として発動できる。このカードを特殊召喚し、対象のカードを手札に戻す。②：相手スタンバイフェイズに発動する。このカードを手札に戻す。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/除去系/ウィッチクラフトゴーレム・アルル.png"
+},
+{
+"name": "鉄騎龍ティアマトン", "text": "このカードは通常召喚できず、このカードの①の効果でのみ特殊召喚できる。このカード名の①の効果は１ターンに１度しか使用できない。①：３枚以上のカードが同じ縦列に存在する場合に発動できる。このカードを手札から特殊召喚する。この効果は相手ターンでも発動できる。②：このカードが特殊召喚に成功した場合に発動する。このカードと同じ縦列の他のカードを全て破壊する。③：このカードがモンスターゾーンに存在する限り、このカードと同じ縦列の使用していないゾーンは使用できない。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/除去系/鉄騎龍ティアマトン.png"
+},
+{
+"name": "夢幻転星イドリース", "text": "このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：フィールドのリンクモンスターのリンクマーカーの合計が８以上の場合に発動できる。このカードを手札から特殊召喚する。この効果は相手ターンでも発動できる。②：相手フィールドのリンクモンスターの数が自分フィールドのリンクモンスターより多い状態で、このカードが特殊召喚に成功した場合に発動できる。フィールドのリンクモンスターを全て墓地へ送る。③：自分フィールドのレベル９モンスターは効果では破壊されない。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/除去系/夢幻転星イドリース.png"
+},
+{
+"name": "EM：Pグレニャード", "text": "このカード名の、①の方法による特殊召喚は１ターンに１度しかできず、②の効果は１ターンに１度しか使用できない。①：フィールドまたは自分か相手の墓地にLモンスターが存在する場合、このカードは手札から特殊召喚できる。②：このカードが手札・墓地に存在し、自分フィールドのリンク２モンスターが、墓地へ送られた場合または表側で除外された場合、このカードを除外し、相手フィールドのカード１枚を対象として発動できる。そのカードを手札に戻す。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/除去系/EM：Pグレニャード.png"
+},
+{
+"name": "ゴーティスの陰影スノーピオス", "text": "このカード名の①②③の効果はそれぞれ１ターンに１度しか使用できない。①：自分・相手のメインフェイズに、自分の手札・墓地から魚族モンスター２体を除外して発動できる。このカードを手札から特殊召喚する。②：このカードが特殊召喚した場合、フィールドの表側表示カード１枚を対象として発動できる。そのカードはフィールドから離れた場合に除外される。③：このカードが除外された場合、自分の墓地から魚族モンスター１体を除外して発動できる。このカードを手札に加える。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/除去系/ゴーティスの陰影スノーピオス.png"
+},
+{
+"name": "深淵の相剣龍", "text": "このカードは通常召喚できず、幻竜族モンスターの効果でのみ特殊召喚できる。このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：このカードが手札・墓地に存在し、カードの効果でモンスターが除外された場合に発動できる。このカードを特殊召喚する。この効果で特殊召喚したこのカードは、フィールドから離れた場合に除外される。②：このカードが特殊召喚に成功した場合、フィールドゾーンのカード１枚と相手のフィールド・墓地のモンスター１体を対象として発動できる。そのカードを除外する。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/除去系/深淵の相剣龍.png"
+},
+{
+"name": "ホルスの黒炎神", "text": "このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：自分フィールドに「ホルス」モンスター及び「王の棺」が存在する場合、手札のこのカードを相手に見せ、自分の手札・フィールドのカード１枚を墓地へ送って発動できる。フィールドのカード１枚を墓地へ送る。②：「ホルスの黒炎神」以外の自分フィールドの表側表示の、「ホルス」モンスターか「王の棺」が相手の効果でフィールドから離れた場合に発動できる。このカードを手札から特殊召喚する。その後、フィールドの他のモンスターを全て墓地へ送る事ができる。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/除去系/ホルスの黒炎神.png"
+},
+{
+"name": "ダーク・ボルテニス", "text": "自分がカウンター罠の発動に成功した場合、自分フィールド上に存在する闇属性モンスター１体をリリースする事で、手札からこのカードを特殊召喚する。この効果で特殊召喚に成功した時、フィールド上に存在するカード１枚を破壊する。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/除去系/ダーク・ボルテニス.png"
+},
+{
+"name": "デス・クラーケン", "text": "このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：フィールドに「海」が存在する場合、「デス・クラーケン」以外の自分フィールドの水属性モンスター１体と、相手フィールドのモンスター１体を対象として発動できる。このカードを手札から特殊召喚し、対象の自分のモンスターを持ち主の手札に戻し、対象の相手モンスターを破壊する。この効果は相手ターンでも発動できる。②：相手モンスターの攻撃宣言時に発動できる。このカードを持ち主の手札に戻し、その攻撃を無効にする。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/除去系/デス・クラーケン.png"
+},
+{
+"name": "ベアルクティ－メガポーラ", "text": "このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：自分・相手のメインフェイズに、手札からこのカード以外のレベル７以上のモンスター１体をリリースして発動できる。このカードを手札から特殊召喚する。この効果の発動後、ターン終了時まで自分はレベルを持つモンスターしか特殊召喚できない。②：自分フィールドに他の「ベアルクティ」モンスターが存在する状態で、このカードが特殊召喚に成功した場合、相手フィールドの魔法・罠カード１枚を対象として発動できる。そのカードを破壊する。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/除去系/ベアルクティ－メガポーラ.png"
+},
+{
+"name": "らくがきじゅう－てらの", "text": "このカードは恐竜族モンスター１体をリリースしてアドバンス召喚できる。このカード名の①の効果は１ターンに１度しか使用できない。①：フィールドに恐竜族モンスターが存在する場合、自分・相手のメインフェイズに発動できる。手札のこのカードをアドバンス召喚する。②：このカードが召喚に成功した場合に発動できる。フィールドのモンスター１体を選んで破壊する。このカードが「らくがきじゅう」モンスターをリリースしてアドバンス召喚していた場合、さらにこのカードの攻撃力は破壊したモンスターの攻撃力の半分アップする。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/除去系/らくがきじゅう－てらの.png"
+},
+{
+"name": "幻煌龍の戦渦", "text": "フィールドに「海」が存在する場合、このカードの発動は手札からもできる。①：自分フィールドのモンスターが通常モンスターのみの場合、相手フィールドのカード１枚を対象として発動できる。そのカードを破壊する。②：墓地のこのカードを除外し、自分フィールドの通常モンスター１体を対象として発動できる。そのモンスターが装備可能な自分フィールドの全ての「幻煌龍」装備魔法カードをその通常モンスターに装備する。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/除去系/幻煌龍の戦渦.png"
+},
+{
+"name": "セフィラの星戦", "text": "「セフィラの星戦」は１ターンに１枚しか発動できない。自分のPゾーンに「セフィラ」カードが２枚存在する場合、このカードの発動は手札からもできる。①：自分フィールドの「セフィラ」カード１枚と相手フィールドのカード１枚を対象として発動できる。そのカードを破壊する。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/除去系/セフィラの星戦.png"
+},
+{
+"name": "デルタ・クロウ－アンチ・リバース", "text": "自分フィールドの「BF」モンスターが３体のみの場合、このカードの発動は手札からもできる。①：自分フィールドに「BF」モンスターが存在する場合に発動できる。相手フィールドにセットされた魔法・罠カードを全て破壊する。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/除去系/デルタ・クロウ－アンチ・リバース.png"
+},
+{
+"name": "ロード・オブ・ザ・タキオンギャラクシー", "text": "このカード名のカードは１ターンに１枚しか発動できない。自分フィールドに「ギャラクシーアイズ・タキオン・ドラゴン」モンスターが存在する場合、このカードの発動は手札からもできる。①：自分・相手のバトルフェイズに、自分フィールドの「ギャラクシーアイズ」XモンスターのX素材を１つ取り除いて発動できる（自分フィールドに「CNo.」モンスターが存在する場合、このカードの発動と効果は無効化されない）。このターンに召喚・特殊召喚された相手フィールドのモンスターを全てデッキに戻す。", "cardImageUrl": "https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/除去系/ロード・オブ・ザ・タキオンギャラクシー.png"
+}]
+);
+
+//テンプレート
+// createThemeBox(
+//   'サンプル',
+//   'あ',
+//   [
+//     {cardId: '1', cardName: 'a', cardImageUrl: 'あ', cardText: '@'}
+//     ,{cardId: '1', cardName: 'a', cardImageUrl: 'あ', cardText: '@'}
+//     ,{cardId: '1', cardName: 'a', cardImageUrl: 'あ', cardText: '@'}
+//     ,{cardId: '1', cardName: 'a', cardImageUrl: 'あ', cardText: '@'}
+//     ,{cardId: '1', cardName: 'a', cardImageUrl: 'あ', cardText: '@'}
+//     ,{cardId: '1', cardName: 'a', cardImageUrl: 'あ', cardText: '@'}
+//     ,{cardId: '1', cardName: 'a', cardImageUrl: 'あ', cardText: '@'}
+//     ,{cardId: '1', cardName: 'a', cardImageUrl: 'あ', cardText: '@'}
+//     ,{cardId: '1', cardName: 'a', cardImageUrl: 'あ', cardText: '@'}
+//     ,{cardId: '1', cardName: 'a', cardImageUrl: 'あ', cardText: '@'}
+//   ]
+// );
+
+</script>
+</body>
+</html>
