@@ -23,7 +23,7 @@ h4 {
   padding: 0.25em 0.5em;/*上下 左右の余白*/
   color: #494949;/*文字色*/
   background: transparent;/*背景透明に*/
-  border-left: solid 5px #7db4e6;/*左線*/
+  border-left: solid 20px #7db4e6;/*左線*/
 }
 .container {
   width: 100%;
@@ -89,8 +89,40 @@ color: white;
   display: inline-block;
 }
 .inlineCard {
-  width: 40px;
+  width: 10%;
   aspect-ratio: 59 / 86;
+}
+blockquote{
+    position:relative;
+    border-top:1px solid #7A87B0;
+    border-bottom:1px solid #7A87B0;
+    padding:10px;
+}
+blockquote:before{
+    position:absolute;
+    background-color:#FFFFFF;
+    color:#7A87B0;
+    font-family:'FontAwesome';
+    content:'❝';
+    line-height:1;
+    text-align:center;
+    top:-20px;
+    left:-10px;
+    padding:10px;
+    font-size:20px;
+}
+blockquote:after{
+    position:absolute;
+    right:-10px;
+    bottom:-20px;
+    background-color:#FFFFFF;
+    padding:10px;
+    color:#7A87B0;
+    font-family:'FontAwesome';
+    content:'❞';
+    line-height:1;
+    text-align:center;
+    font-size:20px;
 }
 </style>
 </head>
