@@ -126,6 +126,60 @@ blockquote:after{
     text-align:center;
     font-size:20px;
 }
+.marked {
+  box-sizing: border-box;
+  border: 2.75px solid #FFE500; 
+}
+#displayBoard {
+  position: fixed;
+  width: 90%;
+  height: 30%;
+  bottom: 20px;
+  left: 5%;
+  /*background-color: transparent;*/
+  z-index: 9999;
+  /*pointer-events: none; これ書くと関数動かないので注意*/ 
+  display: flex;
+}
+#cardImageBoard {
+  pointer-events: none;
+  /*background-color: purple;*/
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+#cardNameDetailBoard {
+  opacity: 0.9;
+  /*background-color: orange;*/
+  display: flex;
+  flex-direction: column;
+}
+#cardNameBoard {
+  border-radius: 1px;
+  /*background-color: blue;*/
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+#cardName {
+  pointer-events: auto;
+}
+#button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  opacity: 0.9;
+}
+#cardDetailBoard {
+  border-radius: 1px;
+  overflow: auto;
+  /*background-color: yellow;*/
+}
+#cardDetail {
+  pointer-events: auto;
+  font-size: 0.7rem;
+}
 </style>
 </head>
 <body>
@@ -143,6 +197,17 @@ blockquote:after{
 <!--  </div>-->
 <!--</div>-->
 </div>
+<div id="displayBoard">
+  <div id="cardImageBoard"></div>
+  <div id='cardNameDetailBoard'>
+    <div id="cardNameBoard">
+      <p id='cardName'></p>
+    </div>
+    <div id="cardDetailBoard">
+      <p id='cardDetail'></p>          
+    </div>
+  </div>
+</div>
 <div class='container' id='paragraphContainer'>
 
 <details>
@@ -151,6 +216,7 @@ blockquote:after{
 2024/08/28 22:00 記事作成しました
 2024/08/29 7:30 加筆しました
 2024/08/29 19:00頃 《ワイトベイキング》のグループを修正しました
+2024/08/30 6:40頃 カードクリックで小画面が出る機能を実装しました。複数カードのグループを修正しました
 </details>
 
 こんにちは、遊戯王プレイヤーのmira（@mirayugioh）です🙌
@@ -203,117 +269,117 @@ blockquote:after{
 [
   {
     "name": "拮抗勝負",
-    "detail": "罠",
+    "detail": "【罠】",
     "effect": "自分フィールドにカードが存在しない場合、このカードの発動は手札からもできる。①：相手フィールドのカードの数が自分フィールドのカードより多い場合、自分・相手のバトルフェイズ終了時に発動できる。自分フィールドのカードの数と同じになるように、相手は自身のフィールドのカードを裏側で除外しなければならない。"
   },
   {
     "name": "幻煌龍の浸渦",
-    "detail": "罠",
+    "detail": "【罠】",
     "effect": "フィールドに「海」が存在する場合、このカードの発動は手札からもできる。①：自分フィールドのモンスターが通常モンスターのみの場合、相手フィールドの効果モンスター１体を対象として発動できる。そのモンスターはターン終了時まで、攻撃力・守備力が１０００ダウンし、効果が無効化される。②：墓地のこのカードを除外し、自分フィールドの通常モンスター１体を対象として発動できる。自分の手札・墓地から「幻煌龍」装備魔法カード１枚を選んでその通常モンスターに装備する。"
   },
   {
     "name": "幻煌龍の戦渦",
-    "detail": "罠",
+    "detail": "【罠】",
     "effect": "フィールドに「海」が存在する場合、このカードの発動は手札からもできる。①：自分フィールドのモンスターが通常モンスターのみの場合、相手フィールドのカード１枚を対象として発動できる。そのカードを破壊する。②：墓地のこのカードを除外し、自分フィールドの通常モンスター１体を対象として発動できる。そのモンスターが装備可能な自分フィールドの全ての「幻煌龍」装備魔法カードをその通常モンスターに装備する。"
   },
   {
     "name": "幻煌龍の天渦",
-    "detail": "罠",
+    "detail": "【罠】",
     "effect": "フィールドに「海」が存在する場合、このカードの発動は手札からもできる。①：自分フィールドの「幻煌龍 スパイラル」１体を対象として発動できる。そのモンスターが「幻煌龍」装備魔法カード３種類以上を装備した状態で、戦闘で相手の効果モンスター３体を破壊した時、自分はデュエルに勝利する。②：自分フィールドの通常モンスターが戦闘・効果で破壊される場合、代わりに墓地のこのカードを除外できる。"
   },
   {
     "name": "セフィラの星戦",
-    "detail": "罠",
+    "detail": "【罠】",
     "effect": "「セフィラの星戦」は１ターンに１枚しか発動できない。自分のPゾーンに「セフィラ」カードが２枚存在する場合、このカードの発動は手札からもできる。①：自分フィールドの「セフィラ」カード１枚と相手フィールドのカード１枚を対象として発動できる。そのカードを破壊する。"
   },
   {
     "name": "タイフーン",
-    "detail": "罠",
+    "detail": "【罠】",
     "effect": "相手フィールドに魔法・罠カードが２枚以上存在し、自分フィールドに魔法・罠カードが存在しない場合、このカードの発動は手札からもできる。①：フィールドの表側表示の魔法・罠カード１枚を対象として発動できる。そのカードを破壊する。"
   },
   {
     "name": "タキオン・ギャラクシースパイラル",
-    "detail": "罠",
+    "detail": "【罠】",
     "effect": "このカード名のカードは１ターンに１枚しか発動できない。自分フィールドに「ギャラクシーアイズ・タキオン・ドラゴン」モンスターが存在する場合、このカードの発動は手札からもできる。①：自分フィールドのドラゴン族の「ギャラクシー」モンスター１体を対象として発動できる。その表側表示モンスターはターン終了時まで、戦闘では破壊されず、自身以外のカードの効果を受けない。"
   },
   {
     "name": "デルタ・クロウ－アンチ・リバース",
-    "detail": "罠",
+    "detail": "【罠】",
     "effect": "自分フィールドの「BF」モンスターが３体のみの場合、このカードの発動は手札からもできる。①：自分フィールドに「BF」モンスターが存在する場合に発動できる。相手フィールドにセットされた魔法・罠カードを全て破壊する。"
   },
   {
     "name": "霊王の波動",
-    "detail": "罠",
+    "detail": "【罠】",
     "effect": "このカード名のカードは１ターンに１枚しか発動できない。相手フィールドにカードが存在する場合、このカードの発動は手札からもできる。①：モンスターを特殊召喚する効果を含む、魔法・罠・モンスターの効果が発動した時に発動できる。その効果を無効にする。自分の墓地に罠カードが存在する場合、さらにその無効にしたカードを破壊する。このカードを手札から発動した場合、発動後、このデュエル中に自分は光・地・風属性モンスターの効果を発動できない。"
   },
   {
     "name": "聖王の粉砕",
-    "detail": "罠",
+    "detail": "【罠】",
     "effect": "このカード名のカードは１ターンに１枚しか発動できない。相手フィールドにカードが存在する場合、このカードの発動は手札からもできる。①：デッキからカードを手札に加える効果を含む、魔法・罠・モンスターの効果が発動した時に発動できる。その効果を無効にする。自分の墓地に罠カードが存在する場合、さらにその無効にしたカードを破壊する。このカードを手札から発動した場合、発動後、このデュエル中に自分は闇・水・炎属性モンスターの効果を発動できない。"
   },
   {
     "name": "ＮＥＸＴ",
-    "detail": "罠",
+    "detail": "【罠】",
     "effect": "このカード名のカードは１ターンに１枚しか発動できない。自分フィールドにカードが存在しない場合、このカードの発動は手札からもできる。①：自分の手札・墓地から、「N」モンスター及び「E・HERO ネオス」を任意の数だけ選んで守備表示で特殊召喚する（同名カードは１枚まで）。この効果で特殊召喚したモンスターの効果は無効化される。この効果で特殊召喚したモンスターが自分フィールドに表側表示で存在する限り、自分は融合モンスターしかEXデッキから特殊召喚できない。"
   },
   {
     "name": "ハーピィの羽根吹雪",
-    "detail": "罠",
+    "detail": "【罠】",
     "effect": "自分フィールドに「ハーピィ」モンスターが存在する場合、このカードの発動は手札からもできる。①：自分フィールドに鳥獣族・風属性モンスターが存在する場合に発動できる。ターン終了時まで、相手が発動したモンスターの効果は無効化される。②：魔法＆罠ゾーンのこのカードが相手の効果で破壊された場合に発動できる。自分のデッキ・墓地から「ハーピィの羽根帚」１枚を選んで手札に加える。"
   },
   {
     "name": "ブラック・ソニック",
-    "detail": "罠",
+    "detail": "【罠】",
     "effect": "自分フィールドのモンスターが「BF」モンスター３体のみの場合、このカードの発動は手札からもできる。①：相手モンスターが自分フィールドの「BF」モンスターに攻撃宣言した時に発動できる。相手フィールドの表側攻撃表示モンスターを全て除外する。"
   },
   {
     "name": "ＢＦ－ツインシャドウ",
-    "detail": "罠",
+    "detail": "【罠】",
     "effect": "このカード名のカードは１ターンに１枚しか発動できない。自分フィールドに「BF」モンスターが２体以上存在する場合、このカードの発動は手札からもできる。①：自分の墓地・除外状態の、「BF」チューナー１体とチューナー以外の「BF」モンスター１体をデッキ・EXデッキに戻して発動できる。その２体のレベルの合計と同じレベルを持つ、「BF」Sモンスターか「ブラックフェザー・ドラゴン」１体をS召喚扱いでEXデッキから特殊召喚する。"
   },
   {
     "name": "海晶乙女波動",
-    "detail": "罠",
+    "detail": "【罠】",
     "effect": "自分フィールドにリンク３以上の「マリンセス」モンスターが存在する場合、このカードの発動は手札からもできる。①：自分フィールドに「マリンセス」リンクモンスターが存在する場合、相手フィールドの表側表示モンスター１体を対象として発動できる。そのモンスターの効果をターン終了時まで無効にする。自分フィールドにリンク２以上の「マリンセス」モンスターが存在する場合、さらに自分フィールドの全ての表側表示モンスターはターン終了時まで、相手の効果を受けない。"
   },
   {
     "name": "海晶乙女瀑布",
-    "detail": "罠",
+    "detail": "【罠】",
     "effect": "自分フィールドにリンク３以上の「マリンセス」モンスターが存在する場合、このカードの発動は手札からもできる。①：自分フィールドの「マリンセス」リンクモンスターを任意の数だけ次の自分スタンバイフェイズまで除外し、フィールドの表側表示モンスター１体を対象として発動できる。そのモンスターの攻撃力はターン終了時まで、このカードを発動するために除外したリンクモンスターのリンクマーカーの合計×３００アップする。"
   },
   {
     "name": "海晶乙女潮流",
-    "detail": "罠",
+    "detail": "【罠】",
     "effect": "このカード名のカードは１ターンに１枚しか発動できない。自分フィールドにリンク３以上の「マリンセス」モンスターが存在する場合、このカードの発動は手札からもできる。①：自分の「マリンセス」リンクモンスターが戦闘で相手モンスターを破壊した時に発動できる。その自分のモンスターのリンクマーカーの数×４００ダメージを相手に与える。自分フィールドにリンク２以上の「マリンセス」モンスターが存在し、相手リンクモンスターを破壊した場合には、破壊されたモンスターのリンクマーカーの数×５００ダメージをさらに相手に与える。"
   },
   {
     "name": "海晶乙女環流",
-    "detail": "罠",
+    "detail": "【罠】",
     "effect": "自分フィールドにリンク３以上の「マリンセス」モンスターが存在する場合、このカードの発動は手札からもできる。①：自分フィールドの水属性リンクモンスター１体を対象として発動できる。そのモンスターを持ち主のEXデッキに戻し、そのモンスターとはカード名が異なり、リンクマーカーの数が同じ「マリンセス」リンクモンスター１体をリンク召喚扱いとしてEXデッキから特殊召喚する。このターン、この効果で特殊召喚したモンスターは直接攻撃できず、戦闘では破壊されない。"
   },
   {
     "name": "無限泡影",
-    "detail": "罠",
+    "detail": "【罠】",
     "effect": "自分フィールドにカードが存在しない場合、このカードの発動は手札からもできる。①：相手フィールドの表側表示モンスター１体を対象として発動できる。そのモンスターの効果をターン終了時まで無効にする。セットされていたこのカードを発動した場合、さらにこのターン中、このカードと同じ縦列の他の魔法・罠カードの効果は無効化される。"
   },
   {
     "name": "ロード・オブ・ザ・タキオンギャラクシー",
-    "detail": "罠",
+    "detail": "【罠】",
     "effect": "このカード名のカードは１ターンに１枚しか発動できない。自分フィールドに「ギャラクシーアイズ・タキオン・ドラゴン」モンスターが存在する場合、このカードの発動は手札からもできる。①：自分・相手のバトルフェイズに、自分フィールドの「ギャラクシーアイズ」XモンスターのX素材を１つ取り除いて発動できる（自分フィールドに「CNo.」モンスターが存在する場合、このカードの発動と効果は無効化されない）。このターンに召喚・特殊召喚された相手フィールドのモンスターを全てデッキに戻す。"
   },
   {
     "name": "タキオン・トランスミグレイション",
-    "detail": "罠",
+    "detail": "【罠】",
     "effect": "自分フィールドに「ギャラクシーアイズ・タキオン・ドラゴン」モンスターが存在する場合、このカードの発動は手札からもできる。①：自分フィールドに「ギャラクシーアイズ」モンスターが存在する場合、チェーン２以降に発動できる。このカードの発動時に積まれていたチェーン上の、全ての相手のモンスターの効果・魔法・罠カードの発動を無効にし、この効果で発動を無効にしたカードがフィールドに存在していた場合、それらを全てデッキに戻す。"
   },
   {
     "name": "ブラック・バード・クローズ",
-    "detail": "罠",
+    "detail": "【罠】",
     "effect": "自分フィールドに「BF」Sモンスターまたは「ブラックフェザー・ドラゴン」が存在する場合、このカードの発動は手札からもできる。①：相手フィールドのモンスターが効果を発動した時、自分フィールドの表側表示の「BF」モンスター１体を墓地へ送って発動できる。その発動を無効にし破壊する。その後、EXデッキから「ブラックフェザー・ドラゴン」１体を特殊召喚できる。"
   },
   {
     "name": "レッド・リブート",
-    "detail": "罠",
+    "detail": "【罠】",
     "effect": "このカードはLPを半分払って手札から発動する事もできる。①：相手が罠カードを発動した時に発動できる。その発動を無効にし、そのカードをそのままセットする。その後、相手はデッキから罠カード１枚を自身の魔法＆罠ゾーンにセットできる。このカードの発動後、ターン終了時まで相手は罠カードを発動できない。"
   }
 ]
@@ -1005,6 +1071,82 @@ Twitter:@aBhs1hpE9cVWYSW
 hljs.initHighlightingOnLoad();
 mermaid.initialize({startOnLoad:true});
 const mainContainer = document.getElementById('mainContainer');
+const cardAspectRatio = 63 / 95;
+const displayBoard = document.getElementById('displayBoard');
+const cardImageBoard = document.getElementById('cardImageBoard');
+const cardNameDetailBoard = document.getElementById('cardNameDetailBoard');
+const cardNameBoard = document.getElementById('cardNameBoard');
+const cardName = document.getElementById('cardName');
+const button = document.getElementById('button');
+const cardDetailBoard = document.getElementById('cardDetailBoard');
+const cardDetail = document.getElementById('cardDetail');
+const setDisplayBoard = () => {
+  // displayBoard の計算された高さを取得し、数値に変換
+  const cardImageBoardNaturalHeight = parseFloat(getComputedStyle(displayBoard).height);
+  // cardImageBoard の高さと幅を設定
+  cardImageBoard.style.height = `${cardImageBoardNaturalHeight}px`;
+  cardImageBoard.style.width = `${cardImageBoardNaturalHeight * cardAspectRatio}px`;
+  // displayBoard の計算された幅を取得し、数値に変換
+  const displayBoardWidth = parseFloat(getComputedStyle(displayBoard).width);
+  // cardNameDetailBoard の高さと幅を設定
+  cardNameDetailBoard.style.height = `${cardImageBoardNaturalHeight}px`;
+  cardNameDetailBoard.style.width = `${displayBoardWidth - parseFloat(getComputedStyle(cardImageBoard).width)}px`;
+  // cardNameBoard の幅と高さを設定
+  cardNameBoard.style.width = cardNameDetailBoard.style.width;
+  cardNameBoard.style.height = `${parseFloat(cardNameDetailBoard.style.height) * 0.2}px`;
+  // cardDetailBoard の幅と高さを設定
+  cardDetailBoard.style.width = cardNameDetailBoard.style.width;
+  cardDetailBoard.style.height = `${parseFloat(cardNameDetailBoard.style.height) * 0.8}px`;
+}
+setDisplayBoard();
+const hideDisplayBox = () => {
+  cardNameBoard.style.backgroundColor = 'transparent';
+  cardImageBoard.style.backgroundColor = 'transparent';
+  cardImageBoard.style.backgroundImage = null;
+  cardName.innerHTML = '';
+  cardDetail.innerHTML = '';
+  cardDetailBoard.style.backgroundColor = 'transparent';
+  const hideButton = cardNameBoard.querySelector('#button');
+  cardNameBoard.removeChild(hideButton);
+  const markedCard = document.querySelector('.marked');
+  markedCard.classList.remove('marked');
+
+}
+const changeMarkedCard = (element) => {
+  const markedCard = document.querySelector('.marked');
+  if (!markedCard) {
+    // どのカードも押されていない場合
+    element.classList.add('marked');
+  } else if (element.classList.contains('marked')) {
+    // それ自身がマークされている場合、特に何もしない
+  } else {
+    // 別のカードがマークされている場合
+    markedCard.classList.remove('marked');
+    element.classList.add('marked');
+  }
+}
+const showCardImageNameDetail = (cardImageUrl, cardNm, cardDt, cardEf) => {
+  cardImageBoard.style.backgroundImage = `url("${cardImageUrl}")`;
+  cardNameBoard.style.backgroundColor = 'gainsboro';
+  cardName.innerHTML = cardNm;
+  cardDetailBoard.style.backgroundColor = 'whitesmoke';
+  const combinedText = cardDt + cardEf;
+  const highlightedSplittedText = combinedText
+  .replace(/手札/g, '<strong><u>手札</u></strong>')
+  .split('】').join('】<br>')
+  .split('。').join('。<br>');
+  cardDetail.innerHTML = highlightedSplittedText;
+  cardDetailBoard.scrollTop = 0;
+  const isHideButton = cardNameBoard.querySelector('#button');
+  if (isHideButton) return;
+  const hideButton = document.createElement('button');
+  cardNameBoard.appendChild(hideButton);
+  hideButton.textContent = '×';
+  hideButton.id = 'button';
+  hideButton.addEventListener('click', ()=> {
+    hideDisplayBox();
+  })
+}
 const createThemeBox = (thumbnailNameValue, thumbnailImageUrl, themeCards) => {
   const themeBox = document.createElement('div');
   mainContainer.appendChild(themeBox);
@@ -1023,17 +1165,17 @@ const createThemeBox = (thumbnailNameValue, thumbnailImageUrl, themeCards) => {
     //イラスト部分をくり抜いてリサイズする
     const cardOriginalWidth = thumbnailImage.width;
     const cardOriginalHeight = thumbnailImage.height;
-    console.log(`元画像の横幅は${cardOriginalWidth}pxで縦幅は${cardOriginalHeight}pxです`);
+    //console.log(`元画像の横幅は${cardOriginalWidth}pxで縦幅は${cardOriginalHeight}pxです`);
     const illustWidth = cardOriginalWidth * 0.76; //イラスト枠の横幅
     const illustHeight = cardOriginalHeight * 0.52; //イラスト枠の縦幅
-    console.log(`イラスト枠の横幅は${illustWidth}pxで縦幅は${illustHeight}pxです`);
+    //console.log(`イラスト枠の横幅は${illustWidth}pxで縦幅は${illustHeight}pxです`);
     thumbnailImage.width = illustWidth;
     thumbnailImage.height = illustHeight;
     thumbnailImage.style.objectFit = 'none';
     thumbnailImage.style.objectPosition = '45% 40%'; //イラスト枠を綺麗に切り取りたい
     const reductionRate = parseFloat(themeBoxWidth) / illustWidth;
     thumbnailImage.style.zoom = `${reductionRate}`;
-    console.log(`切り抜き画像を${reductionRate}倍に拡大縮小しました`);
+    //console.log(`切り抜き画像を${reductionRate}倍に拡大縮小しました`);
     //分類名を入れる
     const thumbnailName = document.createElement('p');
     thumbnailName.classList.add('thumbnailName');
@@ -1045,11 +1187,15 @@ const createThemeBox = (thumbnailNameValue, thumbnailImageUrl, themeCards) => {
     cardBox.classList.add('cardBox');
     const images = themeCards;
     for (const image of images) {
-      const img = document.createElement('img');
-      img.src = image.cardImageUrl;
-      cardBox.appendChild(img);
-      img.classList.add('card');
-    };
+      const imgElement = document.createElement('img');
+      imgElement.src = image.cardImageUrl;
+      cardBox.appendChild(imgElement);
+      imgElement.classList.add('card');
+      imgElement.addEventListener('click', () => {
+        changeMarkedCard(imgElement);
+        showCardImageNameDetail(image.cardImageUrl, image.name, image.detail, image.effect);
+      });
+    }
     themeBox.appendChild(cardBox);
   }
 }
@@ -1067,9 +1213,9 @@ createThemeBox(
     {"name":"屋敷わらし","detail":"【 アンデット族 ／ チューナー ／ 効果 】","effect":"このカード名の効果は１ターンに１度しか使用できない。①：以下のいずれかの効果を含む魔法・罠・モンスターの効果が発動した時、このカードを手札から捨てて発動できる。その発動を無効にする。●墓地からカードを手札・デッキ・EXデッキに加える効果●墓地からモンスターを特殊召喚する効果●墓地からカードを除外する効果","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/屋敷わらし.png"},
     {"name":"スカル・マイスター","detail":"【 悪魔族 ／ 効果 】","effect":"①：相手の墓地で魔法・罠・モンスターの効果が発動した時、このカードを手札から墓地へ送って発動できる。その効果を無効にする。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/スカル・マイスター.png"},
     {"name":"エフェクト・ヴェーラー","detail":"【 魔法使い族 ／ チューナー ／ 効果 】","effect":"①：相手メインフェイズに、このカードを手札から墓地へ送り、相手フィールドの効果モンスター１体を対象として発動できる。その相手モンスターの効果をターン終了時まで無効にする。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/エフェクト・ヴェーラー.png"},
-    {"name":"無限泡影","detail":"罠","text":"自分フィールドにカードが存在しない場合、このカードの発動は手札からもできる。①：相手フィールドの表側表示モンスター１体を対象として発動できる。そのモンスターの効果をターン終了時まで無効にする。セットされていたこのカードを発動した場合、さらにこのターン中、このカードと同じ縦列の他の魔法・罠カードの効果は無効化される。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無限泡影.png"},
-    {"name":"霊王の波動","detail":"罠","text":"このカード名のカードは１ターンに１枚しか発動できない。相手フィールドにカードが存在する場合、このカードの発動は手札からもできる。①：モンスターを特殊召喚する効果を含む、魔法・罠・モンスターの効果が発動した時に発動できる。その効果を無効にする。自分の墓地に罠カードが存在する場合、さらにその無効にしたカードを破壊する。このカードを手札から発動した場合、発動後、このデュエル中に自分は光・地・風属性モンスターの効果を発動できない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/霊王の波動.png"},
-    {"name":"聖王の粉砕","detail":"罠","text":"このカード名のカードは１ターンに１枚しか発動できない。相手フィールドにカードが存在する場合、このカードの発動は手札からもできる。①：デッキからカードを手札に加える効果を含む、魔法・罠・モンスターの効果が発動した時に発動できる。その効果を無効にする。自分の墓地に罠カードが存在する場合、さらにその無効にしたカードを破壊する。このカードを手札から発動した場合、発動後、このデュエル中に自分は闇・水・炎属性モンスターの効果を発動できない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/聖王の粉砕.png"},
+    {"name":"無限泡影","detail": "【罠】","effect":"自分フィールドにカードが存在しない場合、このカードの発動は手札からもできる。①：相手フィールドの表側表示モンスター１体を対象として発動できる。そのモンスターの効果をターン終了時まで無効にする。セットされていたこのカードを発動した場合、さらにこのターン中、このカードと同じ縦列の他の魔法・罠カードの効果は無効化される。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無限泡影.png"},
+    {"name":"霊王の波動","detail": "【罠】","effect":"このカード名のカードは１ターンに１枚しか発動できない。相手フィールドにカードが存在する場合、このカードの発動は手札からもできる。①：モンスターを特殊召喚する効果を含む、魔法・罠・モンスターの効果が発動した時に発動できる。その効果を無効にする。自分の墓地に罠カードが存在する場合、さらにその無効にしたカードを破壊する。このカードを手札から発動した場合、発動後、このデュエル中に自分は光・地・風属性モンスターの効果を発動できない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/霊王の波動.png"},
+    {"name":"聖王の粉砕","detail": "【罠】","effect":"このカード名のカードは１ターンに１枚しか発動できない。相手フィールドにカードが存在する場合、このカードの発動は手札からもできる。①：デッキからカードを手札に加える効果を含む、魔法・罠・モンスターの効果が発動した時に発動できる。その効果を無効にする。自分の墓地に罠カードが存在する場合、さらにその無効にしたカードを破壊する。このカードを手札から発動した場合、発動後、このデュエル中に自分は闇・水・炎属性モンスターの効果を発動できない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/聖王の粉砕.png"},
     {"name":"PSYフレームギア・δ","detail":"【 サイキック族 ／ 特殊召喚 ／ チューナー ／ 効果 】","effect":"このカードは通常召喚できず、カードの効果でのみ特殊召喚できる。①：自分フィールドにモンスターが存在せず、相手の魔法カードが発動した時に発動できる。手札のこのカードと自分の手札・デッキ・墓地の「PSYフレーム・ドライバー」１体を選んで特殊召喚し、その発動を無効にし破壊する。この効果で特殊召喚したモンスターは全てエンドフェイズに除外される。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/PSYフレームギア・δ.png"},
     {"name":"PSYフレームギア・ε","detail":"【 サイキック族 ／ 特殊召喚 ／ チューナー ／ 効果 】","effect":"このカードは通常召喚できず、カードの効果でのみ特殊召喚できる。①：自分フィールドにモンスターが存在せず、相手の罠カードが発動した時に発動できる。手札のこのカードと自分の手札・デッキ・墓地の「PSYフレーム・ドライバー」１体を選んで特殊召喚し、その発動を無効にし破壊する。この効果で特殊召喚したモンスターは全てエンドフェイズに除外される。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/PSYフレームギア・ε.png"},
     {"name":"教導の騎士フルルドリス","detail":"【 魔法使い族 ／ 効果 】","effect":"このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：EXデッキから特殊召喚されたモンスターがフィールドに存在する場合、自分・相手のメインフェイズに発動できる。このカードを手札から特殊召喚する。自分フィールドに他の「ドラグマ」モンスターが存在する場合、さらにフィールドの表側表示モンスター１体を選んでその効果をターン終了時まで無効にできる。②：自分の「ドラグマ」モンスターの攻撃宣言時に発動できる。自分フィールドの全ての「ドラグマ」モンスターの攻撃力は５００アップする。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/教導の騎士フルルドリス.png"},
@@ -1077,6 +1223,7 @@ createThemeBox(
     {"name":"緑光の宣告者","detail":"【 天使族 ／ 効果 】","effect":"①：相手が魔法カードを発動した時、手札からこのカードと天使族モンスター１体を墓地へ送って発動できる。その発動を無効にし破壊する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/緑光の宣告者.png"},
     {"name":"紫光の宣告者","detail":"【 天使族 ／ 効果 】","effect":"①：相手が罠カードを発動した時、手札からこのカードと天使族モンスター１体を墓地へ送って発動できる。その発動を無効にし破壊する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/紫光の宣告者.png"},
     {"name":"朱光の宣告者","detail":"【 天使族 ／ チューナー ／ 効果 】","effect":"①：相手がモンスターの効果を発動した時、手札からこのカードと天使族モンスター１体を墓地へ送って発動できる。その発動を無効にし破壊する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/朱光の宣告者.png"},
+    {"name":"聖蔓の乙女","detail":"【 植物族 ／ 効果 】","effect":"このカード名の①の効果は１ターンに１度しか使用できない。①：EXデッキから特殊召喚された自分フィールドの植物族モンスターを対象とする魔法・罠・モンスターの効果を相手が発動した時に発動できる。このカードを手札から特殊召喚し、その効果を無効にする。②：このカードがモンスターゾーンに存在する限り、自分フィールドの「サンアバロン」魔法・罠カード及び「サンヴァイン」魔法・罠カードは相手の効果の対象にならない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/聖蔓の乙女.png"},
     {"name":"アヴァロンの魔女モルガン","detail":"【 魔法使い族 ／ 効果 】","effect":"このカード名の効果は１ターンに１度しか使用できない。①：自分フィールドに「聖騎士」モンスター及び「聖剣」装備魔法カードが存在し、相手が魔法・罠・モンスターの効果を発動した時、このカードを手札から墓地へ送って発動できる。自分フィールドの「聖剣」装備魔法カード１枚を選んで破壊し、その発動を無効にする。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/アヴァロンの魔女モルガン.png"},
     {"name":"BF－雪撃のチヌーク","detail":"【 鳥獣族 ／ 効果 】","effect":"このカード名の効果は１ターンに１度しか使用できない。①：手札・フィールドのこのカードを墓地へ送り、相手フィールドの表側表示モンスター１体を対象として発動できる（自分フィールドに闇属性Sモンスターが存在する場合、この効果は相手ターンでも発動できる）。EXデッキから「BF」Sモンスターか「ブラックフェザー・ドラゴン」１体を墓地へ送り、対象のモンスターはターン終了時まで、攻撃力が７００ダウンし、効果は無効化される。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/BF－雪撃のチヌーク.png"},
     {"name":"星杯の守護竜","detail":"【 ドラゴン族 ／ 効果 】","effect":"このカード名の②の効果は１ターンに１度しか使用できない。①：自分フィールドのリンク状態のモンスターを対象とする魔法・罠・モンスターの効果が発動した時、手札・フィールドのこのカードを墓地へ送って発動できる。その発動を無効にし破壊する。②：墓地のこのカードを除外し、自分の墓地の通常モンスター１体を対象として発動できる。そのモンスターをリンクモンスターのリンク先となる自分フィールドに守備表示で特殊召喚する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/星杯の守護竜.png"},
@@ -1090,14 +1237,15 @@ createThemeBox(
     {"name":"六花精ヘレボラス","detail":"【 植物族 ／ 効果 】","effect":"このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：自分フィールドに「六花」モンスターが存在し、自分フィールドのモンスターを対象とするモンスターの効果を相手が発動した時、手札・フィールドのこのカードをリリースして発動できる。その効果を無効にする。②：このカードが墓地に存在する場合、自分フィールドの植物族モンスター１体をリリースして発動できる。このカードを守備表示で特殊召喚する。この効果で特殊召喚したこのカードは、フィールドから離れた場合に除外される。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/六花精ヘレボラス.png"},
     {"name":"薔薇の聖弓手","detail":"【 戦士族 ／ 効果 】","effect":"自分フィールド上に植物族モンスターが存在し、相手が罠カードを発動した時、このカードを手札から墓地へ送って発動できる。その発動を無効にし破壊する。この効果は相手ターンでも発動できる。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/薔薇の聖弓手.png"},
     {"name":"墓守の監視者","detail":"【 魔法使い族 ／ 効果 】","effect":"相手プレイヤーが自らの手札を捨てる効果を含むカードを発動した時、このカードを手札から墓地に送る事で、その発動と効果を無効にしてそのカードを破壊する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/墓守の監視者.png"},
+    {"name":"喜劇のデスピアン","detail":"【 天使族 ／ 効果 】","effect":"このカード名の①②の効果は１ターンに１度、いずれか１つしか使用できない。①：自分フィールドの表側表示の「デスピア」カードを対象とする魔法・罠・モンスターの効果を相手が発動した時、このカードを手札から捨てて発動できる。その効果を無効にする。②：このカードが墓地に存在する場合、自分フィールドの融合モンスター１体をリリースして発動できる。このカードを特殊召喚する。この効果は相手ターンでも発動できる。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/喜劇のデスピアン.png"},
     {"name":"古聖戴サウラヴィス","detail":"【 ドラゴン族 ／ 儀式 ／ 効果 】","effect":"「精霊の祝福」により降臨①：自分フィールドのモンスターを対象とする魔法・罠・モンスターの効果を相手が発動した時、このカードを手札から捨てて発動できる。その発動を無効にする。②：相手がモンスターを特殊召喚する際に、フィールドのこのカードを手札に戻して発動できる。その特殊召喚を無効にし、そのモンスターを除外する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/古聖戴サウラヴィス.png"},
     {"name":"トリシューラの影霊衣","detail":"【 戦士族 ／ 儀式 ／ 効果 】","effect":"「影霊衣」儀式魔法カードにより降臨。レベル９以外のモンスターのみを使用した儀式召喚でしか特殊召喚できない。このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：自分フィールドの「影霊衣」モンスターを対象とする魔法・罠・モンスターの効果が発動した時、このカードを手札から捨てて発動できる。その発動を無効にする。②：このカードが儀式召喚に成功した時に発動できる。相手の手札・フィールド・墓地のカードをそれぞれ１枚選び（手札からはランダムに選ぶ）、その３枚を除外する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/トリシューラの影霊衣.png"},
-    {"name":"レッド・リブート","detail":"罠","text":"このカードはLPを半分払って手札から発動する事もできる。①：相手が罠カードを発動した時に発動できる。その発動を無効にし、そのカードをそのままセットする。その後、相手はデッキから罠カード１枚を自身の魔法＆罠ゾーンにセットできる。このカードの発動後、ターン終了時まで相手は罠カードを発動できない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/レッド・リブート.png"},
-    {"name":"海晶乙女波動","detail":"罠","text":"自分フィールドにリンク３以上の「マリンセス」モンスターが存在する場合、このカードの発動は手札からもできる。①：自分フィールドに「マリンセス」リンクモンスターが存在する場合、相手フィールドの表側表示モンスター１体を対象として発動できる。そのモンスターの効果をターン終了時まで無効にする。自分フィールドにリンク２以上の「マリンセス」モンスターが存在する場合、さらに自分フィールドの全ての表側表示モンスターはターン終了時まで、相手の効果を受けない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/海晶乙女波動.png"},
-    {"name":"幻煌龍の浸渦","detail":"罠","text":"フィールドに「海」が存在する場合、このカードの発動は手札からもできる。①：自分フィールドのモンスターが通常モンスターのみの場合、相手フィールドの効果モンスター１体を対象として発動できる。そのモンスターはターン終了時まで、攻撃力・守備力が１０００ダウンし、効果が無効化される。②：墓地のこのカードを除外し、自分フィールドの通常モンスター１体を対象として発動できる。自分の手札・墓地から「幻煌龍」装備魔法カード１枚を選んでその通常モンスターに装備する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/幻煌龍の浸渦.png"},
-    {"name":"ハーピィの羽根吹雪","detail":"罠","text":"自分フィールドに「ハーピィ」モンスターが存在する場合、このカードの発動は手札からもできる。①：自分フィールドに鳥獣族・風属性モンスターが存在する場合に発動できる。ターン終了時まで、相手が発動したモンスターの効果は無効化される。②：魔法＆罠ゾーンのこのカードが相手の効果で破壊された場合に発動できる。自分のデッキ・墓地から「ハーピィの羽根帚」１枚を選んで手札に加える。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ハーピィの羽根吹雪.png"},
-    {"name":"ブラック・バード・クローズ","detail":"罠","text":"自分フィールドに「BF」Sモンスターまたは「ブラックフェザー・ドラゴン」が存在する場合、このカードの発動は手札からもできる。①：相手フィールドのモンスターが効果を発動した時、自分フィールドの表側表示の「BF」モンスター１体を墓地へ送って発動できる。その発動を無効にし破壊する。その後、EXデッキから「ブラックフェザー・ドラゴン」１体を特殊召喚できる。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ブラック・バード・クローズ.png"},
-    {"name":"タキオン・トランスミグレイション","detail":"罠","text":"自分フィールドに「ギャラクシーアイズ・タキオン・ドラゴン」モンスターが存在する場合、このカードの発動は手札からもできる。①：自分フィールドに「ギャラクシーアイズ」モンスターが存在する場合、チェーン２以降に発動できる。このカードの発動時に積まれていたチェーン上の、全ての相手のモンスターの効果・魔法・罠カードの発動を無効にし、この効果で発動を無効にしたカードがフィールドに存在していた場合、それらを全てデッキに戻す。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/タキオン・トランスミグレイション.png"}
+    {"name":"レッド・リブート","detail": "【罠】","effect":"このカードはLPを半分払って手札から発動する事もできる。①：相手が罠カードを発動した時に発動できる。その発動を無効にし、そのカードをそのままセットする。その後、相手はデッキから罠カード１枚を自身の魔法＆罠ゾーンにセットできる。このカードの発動後、ターン終了時まで相手は罠カードを発動できない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/レッド・リブート.png"},
+    {"name":"海晶乙女波動","detail": "【罠】","effect":"自分フィールドにリンク３以上の「マリンセス」モンスターが存在する場合、このカードの発動は手札からもできる。①：自分フィールドに「マリンセス」リンクモンスターが存在する場合、相手フィールドの表側表示モンスター１体を対象として発動できる。そのモンスターの効果をターン終了時まで無効にする。自分フィールドにリンク２以上の「マリンセス」モンスターが存在する場合、さらに自分フィールドの全ての表側表示モンスターはターン終了時まで、相手の効果を受けない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/海晶乙女波動.png"},
+    {"name":"幻煌龍の浸渦","detail": "【罠】","effect":"フィールドに「海」が存在する場合、このカードの発動は手札からもできる。①：自分フィールドのモンスターが通常モンスターのみの場合、相手フィールドの効果モンスター１体を対象として発動できる。そのモンスターはターン終了時まで、攻撃力・守備力が１０００ダウンし、効果が無効化される。②：墓地のこのカードを除外し、自分フィールドの通常モンスター１体を対象として発動できる。自分の手札・墓地から「幻煌龍」装備魔法カード１枚を選んでその通常モンスターに装備する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/幻煌龍の浸渦.png"},
+    {"name":"ハーピィの羽根吹雪","detail": "【罠】","effect":"自分フィールドに「ハーピィ」モンスターが存在する場合、このカードの発動は手札からもできる。①：自分フィールドに鳥獣族・風属性モンスターが存在する場合に発動できる。ターン終了時まで、相手が発動したモンスターの効果は無効化される。②：魔法＆罠ゾーンのこのカードが相手の効果で破壊された場合に発動できる。自分のデッキ・墓地から「ハーピィの羽根帚」１枚を選んで手札に加える。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ハーピィの羽根吹雪.png"},
+    {"name":"ブラック・バード・クローズ","detail": "【罠】","effect":"自分フィールドに「BF」Sモンスターまたは「ブラックフェザー・ドラゴン」が存在する場合、このカードの発動は手札からもできる。①：相手フィールドのモンスターが効果を発動した時、自分フィールドの表側表示の「BF」モンスター１体を墓地へ送って発動できる。その発動を無効にし破壊する。その後、EXデッキから「ブラックフェザー・ドラゴン」１体を特殊召喚できる。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ブラック・バード・クローズ.png"},
+    {"name":"タキオン・トランスミグレイション","detail": "【罠】","effect":"自分フィールドに「ギャラクシーアイズ・タキオン・ドラゴン」モンスターが存在する場合、このカードの発動は手札からもできる。①：自分フィールドに「ギャラクシーアイズ」モンスターが存在する場合、チェーン２以降に発動できる。このカードの発動時に積まれていたチェーン上の、全ての相手のモンスターの効果・魔法・罠カードの発動を無効にし、この効果で発動を無効にしたカードがフィールドに存在していた場合、それらを全てデッキに戻す。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/タキオン・トランスミグレイション.png"}
   ]
 );
 //除去系
@@ -1120,10 +1268,10 @@ createThemeBox(
     {"name":"らくがきじゅう－てらの","detail":"【 恐竜族 ／ 効果 】","effect":"このカードは恐竜族モンスター１体をリリースしてアドバンス召喚できる。このカード名の①の効果は１ターンに１度しか使用できない。①：フィールドに恐竜族モンスターが存在する場合、自分・相手のメインフェイズに発動できる。手札のこのカードをアドバンス召喚する。②：このカードが召喚に成功した場合に発動できる。フィールドのモンスター１体を選んで破壊する。このカードが「らくがきじゅう」モンスターをリリースしてアドバンス召喚していた場合、さらにこのカードの攻撃力は破壊したモンスターの攻撃力の半分アップする。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/らくがきじゅう－てらの.png"},
     {"name":"古尖兵ケルベク","detail":"【 天使族 ／ 効果 】","effect":"このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：手札・デッキからカードが相手の墓地へ送られた場合、相手フィールドの特殊召喚されたモンスター１体を対象として発動できる。このカードを手札から特殊召喚する。その後、対象のモンスターを持ち主の手札に戻す。②：このカードが手札・デッキから墓地へ送られた場合に発動できる。お互いのデッキの上からカードを５枚墓地へ送る。その後、自分の墓地に「現世と冥界の逆転」が存在する場合、自分の墓地から罠カード１枚を選んで自分フィールドにセットできる。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/古尖兵ケルベク.png"},
     {"name":"深淵の相剣龍","detail":"【 幻竜族 ／ 特殊召喚 ／ 効果 】","effect":"このカードは通常召喚できず、幻竜族モンスターの効果でのみ特殊召喚できる。このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：このカードが手札・墓地に存在し、カードの効果でモンスターが除外された場合に発動できる。このカードを特殊召喚する。この効果で特殊召喚したこのカードは、フィールドから離れた場合に除外される。②：このカードが特殊召喚に成功した場合、フィールドゾーンのカード１枚と相手のフィールド・墓地のモンスター１体を対象として発動できる。そのカードを除外する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/深淵の相剣龍.png"},
-    {"name":"タイフーン","detail":"罠","text":"相手フィールドに魔法・罠カードが２枚以上存在し、自分フィールドに魔法・罠カードが存在しない場合、このカードの発動は手札からもできる。①：フィールドの表側表示の魔法・罠カード１枚を対象として発動できる。そのカードを破壊する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/タイフーン.png"},
-    {"name":"幻煌龍の戦渦","detail":"罠","text":"フィールドに「海」が存在する場合、このカードの発動は手札からもできる。①：自分フィールドのモンスターが通常モンスターのみの場合、相手フィールドのカード１枚を対象として発動できる。そのカードを破壊する。②：墓地のこのカードを除外し、自分フィールドの通常モンスター１体を対象として発動できる。そのモンスターが装備可能な自分フィールドの全ての「幻煌龍」装備魔法カードをその通常モンスターに装備する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/幻煌龍の戦渦.png"},
-    {"name":"デルタ・クロウ－アンチ・リバース","detail":"罠","text":"自分フィールドの「BF」モンスターが３体のみの場合、このカードの発動は手札からもできる。①：自分フィールドに「BF」モンスターが存在する場合に発動できる。相手フィールドにセットされた魔法・罠カードを全て破壊する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/デルタ・クロウ－アンチ・リバース.png"},
-    {"name":"セフィラの星戦","detail":"罠","text":"「セフィラの星戦」は１ターンに１枚しか発動できない。自分のPゾーンに「セフィラ」カードが２枚存在する場合、このカードの発動は手札からもできる。①：自分フィールドの「セフィラ」カード１枚と相手フィールドのカード１枚を対象として発動できる。そのカードを破壊する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/セフィラの星戦.png"},
+    {"name":"タイフーン","detail": "【罠】","effect":"相手フィールドに魔法・罠カードが２枚以上存在し、自分フィールドに魔法・罠カードが存在しない場合、このカードの発動は手札からもできる。①：フィールドの表側表示の魔法・罠カード１枚を対象として発動できる。そのカードを破壊する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/タイフーン.png"},
+    {"name":"幻煌龍の戦渦","detail": "【罠】","effect":"フィールドに「海」が存在する場合、このカードの発動は手札からもできる。①：自分フィールドのモンスターが通常モンスターのみの場合、相手フィールドのカード１枚を対象として発動できる。そのカードを破壊する。②：墓地のこのカードを除外し、自分フィールドの通常モンスター１体を対象として発動できる。そのモンスターが装備可能な自分フィールドの全ての「幻煌龍」装備魔法カードをその通常モンスターに装備する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/幻煌龍の戦渦.png"},
+    {"name":"デルタ・クロウ－アンチ・リバース","detail": "【罠】","effect":"自分フィールドの「BF」モンスターが３体のみの場合、このカードの発動は手札からもできる。①：自分フィールドに「BF」モンスターが存在する場合に発動できる。相手フィールドにセットされた魔法・罠カードを全て破壊する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/デルタ・クロウ－アンチ・リバース.png"},
+    {"name":"セフィラの星戦","detail": "【罠】","effect":"「セフィラの星戦」は１ターンに１枚しか発動できない。自分のPゾーンに「セフィラ」カードが２枚存在する場合、このカードの発動は手札からもできる。①：自分フィールドの「セフィラ」カード１枚と相手フィールドのカード１枚を対象として発動できる。そのカードを破壊する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/セフィラの星戦.png"},
   ]
 );
 //ルール干渉系
@@ -1144,7 +1292,7 @@ createThemeBox(
     {"name":"マルチャミー・プルリア","detail":"【 水族 ／ 効果 】","effect":"このカードの効果を発動するターン、自分はこのカード以外の「マルチャミー」モンスターの効果を１度しか発動できない。①：自分・相手ターンに、自分フィールドにカードが存在しない場合、このカードを手札から捨てて発動できる。このターン中、以下の効果を適用する。●相手が手札からモンスターを召喚・特殊召喚する度に、自分は１枚ドローする。●エンドフェイズに、自分の手札が相手フィールドのカードの数＋６枚より多い場合、その差の数だけ自分の手札をランダムにデッキに戻す。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/マルチャミー・プルリア.png"},
     {"name":"マルチャミー・フワロス","detail":"【 鳥獣族 ／ 効果 】","effect":"このカードの効果を発動するターン、自分はこのカード以外の「マルチャミー」モンスターの効果を１度しか発動できない。①：自分・相手ターンに、自分フィールドにカードが存在しない場合、このカードを手札から捨てて発動できる。このターン中、以下の効果を適用する。●相手がデッキ・EXデッキからモンスターを特殊召喚する度に、自分は１枚ドローする。●エンドフェイズに、自分の手札が相手フィールドのカードの数＋６枚より多い場合、その差の数だけ自分の手札をランダムにデッキに戻す。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/マルチャミー・フワロス.png"},
     {"name":"sophiaの影霊衣","detail":"【 魔法使い族 ／ 儀式 ／ 効果 】","effect":"「影霊衣」儀式魔法カードにより降臨。それぞれ種族の異なる自分フィールドのモンスター３体を使用した手札からの儀式召喚でしか特殊召喚できない。①：自分・相手のメインフェイズ１に手札からこのカードと「影霊衣」魔法カード１枚を捨てて発動できる。そのフェイズの間、相手はエクストラデッキからモンスターを特殊召喚できない。②：このカードが儀式召喚に成功した時に発動できる。このカード以外のお互いのフィールド・墓地のカードを全て除外する。この効果を発動するターン、自分は他のモンスターを通常召喚・特殊召喚できない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/sophiaの影霊衣.png"}
-   ]
+  ]
 );
 //その他妨害
 createThemeBox(
@@ -1166,20 +1314,21 @@ createThemeBox(
     {"name":"アロマリリス－ロザリーナ","detail":"【 植物族 ／ チューナー ／ 効果 】","effect":"このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：自分・相手ターンに、このカードを手札から捨て、自分フィールドの「アロマ」モンスター１体を対象として発動できる。そのモンスターの攻撃力の半分だけ自分のLPを回復する。②：このカードが召喚・特殊召喚した場合に発動できる。デッキからチューナー以外の「アロマ」モンスター１体を特殊召喚する。この効果の発動後、ターン終了時まで自分は植物族モンスターしか特殊召喚できない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/アロマリリス－ロザリーナ.png"},
     {"name":"ガジェット・ドライバー","detail":"【 機械族 ／ 効果 】","effect":"①：このカードを手札から墓地へ送り、自分フィールドの「D」モンスターを任意の数だけ対象として発動できる。その自分の「D」モンスターの表示形式を変更する。この効果は相手ターンでも発動できる。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ガジェット・ドライバー.png"},
     {"name":"サブテラーの刀匠","detail":"【 獣戦士族 ／ 効果 】","effect":"①：自分フィールドの裏側表示モンスター１体のみが相手の効果の対象になった時、または相手モンスターの攻撃対象に選択された時、手札・フィールドのこのカードを墓地へ送り、その裏側表示モンスター以外の自分フィールドのモンスター１体を対象として発動できる。その対象を正しい対象となるそのモンスターに移し替える。②：自分フィールドに裏側表示モンスターが存在する限り、このカードは戦闘・効果では破壊されない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/サブテラーの刀匠.png"},
+    {"name":"ファイヤークラッカー","detail":"【 悪魔族 ／ 効果 】","effect":"「ファイヤークラッカー」の①の効果は１ターンに１度しか使用できない。①：このカードを手札から捨てて発動できる。相手に１０００ダメージを与え、次の自分ドローフェイズをスキップする。この効果は相手ターンでも発動できる。②：このカードがモンスターゾーンに存在する限り、相手が効果ダメージを受ける度にこのカードにカウンターを１つ置く。③：自分・相手のエンドフェイズに発動する。このカードのカウンターを全て取り除き、その数×３００ダメージを相手に与える。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ファイヤークラッカー.png"},
     {"name":"タイム・エスケーパー","detail":"【 サイキック族 ／ 効果 】","effect":"このカードを手札から捨て、自分フィールド上に表側表示で存在するサイキック族モンスター１体を選択して発動する。選択したモンスターを次の自分のスタンバイフェイズ時までゲームから除外する。この効果は相手ターンでも発動する事ができる。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/タイム・エスケーパー.png"},
     {"name":"ミレニアム・アイズ・イリュージョニスト","detail":"【 魔法使い族 ／ 効果 】","effect":"このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：このカードを手札から捨て、相手フィールドの効果モンスター１体を対象として発動できる。自分フィールドの、「アイズ・サクリファイス」融合モンスターまたは「サクリファイス」１体を選び、その効果による装備カード扱いとして対象の相手の効果モンスターを装備する。この効果は相手ターンでも発動できる。②：フィールドに「アイズ・サクリファイス」融合モンスターまたは「サクリファイス」が特殊召喚された場合に発動する。墓地のこのカードを手札に加える。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ミレニアム・アイズ・イリュージョニスト.png"},
     {"name":"メメント・メイス","detail":"【 天使族 ／ 効果 】","effect":"このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：相手メインフェイズに、自分フィールドに「冥骸合竜－メメントラル・テクトリカ」が存在する場合、このカードを手札から捨て、相手フィールドの表側表示モンスター１体を対象として発動できる。そのモンスターのコントロールをエンドフェイズまで得る。②：自分メインフェイズに発動できる。自分フィールドの「メメント」モンスター１体を破壊し、デッキから「メメント・メイス」以外の「メメント」カード１枚を手札に加える。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/メメント・メイス.png"},
     {"name":"ワナビー！","detail":"【 昆虫族 ／ 効果 】","effect":"このカード名の効果は１ターンに１度しか使用できない。①：自分・相手のエンドフェイズに、手札・フィールドのこのカードを墓地へ送って発動できる。使用していない相手の魔法＆罠ゾーンの数だけ自分のデッキの上からカードをめくる。その中から罠カード１枚を選んで自分フィールドにセットできる。残りのカードは好きな順番でデッキの下に戻す。この効果でセットしたカードは次のエンドフェイズに墓地へ送られる。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ワナビー！.png"},
-    {"name":"喜劇のデスピアン","detail":"【 天使族 ／ 効果 】","effect":"このカード名の①②の効果は１ターンに１度、いずれか１つしか使用できない。①：自分フィールドの表側表示の「デスピア」カードを対象とする魔法・罠・モンスターの効果を相手が発動した時、このカードを手札から捨てて発動できる。その効果を無効にする。②：このカードが墓地に存在する場合、自分フィールドの融合モンスター１体をリリースして発動できる。このカードを特殊召喚する。この効果は相手ターンでも発動できる。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/喜劇のデスピアン.png"},
     {"name":"寄生虫パラノイド","detail":"【 昆虫族 ／ 効果 】","effect":"このカード名の①の効果は１ターンに１度しか使用できない。①：フィールドの表側表示モンスター１体を対象として発動できる。このカードを手札から装備カード扱いとしてそのモンスターに装備する。装備モンスターは種族が昆虫族になり、昆虫族モンスターを攻撃できず、昆虫族モンスターを対象として発動した装備モンスターの効果は無効化される。この効果は相手ターンでも発動できる。②：装備カード扱いのこのカードが墓地へ送られた場合に発動できる。手札からレベル７以上の昆虫族モンスター１体を召喚条件を無視して特殊召喚する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/寄生虫パラノイド.png"},
     {"name":"十二獣ヴァイパー","detail":"【 獣戦士族 ／ 効果 】","effect":"①：自分フィールドの獣戦士族Xモンスター１体を対象として発動できる。自分の手札・フィールドのこのカードをそのモンスターの下に重ねてX素材とする。この効果は相手ターンでも発動できる。②：このカードを素材として持っている、元々の種族が獣戦士族のXモンスターは以下の効果を得る。●このカードが相手モンスターと戦闘を行ったダメージ計算後に発動する。その相手モンスターを除外する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/十二獣ヴァイパー.png"},
-    {"name":"聖蔓の乙女","detail":"【 植物族 ／ 効果 】","effect":"このカード名の①の効果は１ターンに１度しか使用できない。①：EXデッキから特殊召喚された自分フィールドの植物族モンスターを対象とする魔法・罠・モンスターの効果を相手が発動した時に発動できる。このカードを手札から特殊召喚し、その効果を無効にする。②：このカードがモンスターゾーンに存在する限り、自分フィールドの「サンアバロン」魔法・罠カード及び「サンヴァイン」魔法・罠カードは相手の効果の対象にならない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/聖蔓の乙女.png"},
     {"name":"対壊獣用決戦兵器メカサンダー・キング","detail":"【 機械族 ／ 効果 】","effect":"このカード名の④の効果はデュエル中に１度しか使用できない。①：お互いのメインフェイズにこのカードを手札から捨てて発動できる。元々の持ち主が相手となる自分フィールドの「壊獣」モンスター１体を選んで除外する。その後、自分の墓地からモンスター１体を選んで特殊召喚できる。②：「壊獣」モンスターは自分フィールドに１体しか表側表示で存在できない。③：フィールドのこのカードは他の「壊獣」カードの効果を受けず、「壊獣」モンスターとの戦闘では破壊されない。④：自分エンドフェイズに発動できる。このカードを墓地から特殊召喚する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/対壊獣用決戦兵器メカサンダー・キング.png"},
     {"name":"電送擬人エレキネシス","detail":"【 サイキック族 ／ 効果 】","effect":"①：手札・フィールドのこのカードを墓地へ送り、相手フィールドのモンスター１体を対象として発動できる。その相手モンスターの位置を、他の相手のメインモンスターゾーンに移動する。この効果は相手ターンでも発動できる。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/電送擬人エレキネシス.png"},
+    {"name":"WW－ブリザード・ベル","detail":"【 魔法使い族 ／ チューナー ／ 効果 】","effect":"このカード名の②の効果は１ターンに１度しか使用できない。①：自分フィールドのモンスターが、存在しない場合または「WW」モンスターのみの場合、このカードはリリースなしで召喚できる。②：自分フィールドに「WW－ブリザード・ベル」以外の「WW」モンスターが存在する場合、相手メインフェイズに、手札・フィールドのこのカードを墓地へ送って発動できる。相手に５００ダメージを与える。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/WW－ブリザード・ベル.png"},
     {"name":"白銀の城の火吹炉","detail":"【 悪魔族 ／ 効果 】","effect":"このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：手札・フィールドのこのカードを墓地へ送り、手札を１枚捨てて発動できる。手札・デッキから「ラビュリンス」魔法・罠カード１枚を選んで自分フィールドにセットする。この効果は相手ターンでも発動できる。②：このカードが墓地に存在する状態で、自分の通常罠カードの効果でモンスターがフィールドから離れた場合に発動できる。このカードを特殊召喚する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/白銀の城の火吹炉.png"},
     {"name":"白銀の城の狂時計","detail":"【 悪魔族 ／ 効果 】","effect":"このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：このカードを手札から捨てて発動できる。このターン、自分フィールドに「ラビュリンス」モンスターが存在する場合、自分は通常罠カード１枚をセットしたターンに発動できる。この効果は相手ターンでも発動できる。②：このカードが墓地に存在する状態で、「白銀の城の狂時計」以外の「ラビュリンス」カードの効果または通常罠カードを自分が発動するために、手札のカードが墓地へ送られた場合に発動できる。このカードを手札に加えるか特殊召喚する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/白銀の城の狂時計.png"},
     {"name":"白銀の城の執事 アリアス","detail":"【 悪魔族 ／ 効果 】","effect":"このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：自分・相手のメインフェイズに、手札・フィールドのこのカードを墓地へ送って発動できる。手札から、「ラビュリンス」モンスター１体を特殊召喚するか、通常罠カード１枚をセットする。この効果でセットしたカードはセットしたターンでも発動できる。②：「白銀の城の執事 アリアス」以外の自分の、「ラビュリンス」カードか通常罠カードの効果の発動にチェーンして相手が効果を発動した時、この効果を墓地で発動できる。このカードを特殊召喚する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/白銀の城の執事 アリアス.png"},
     {"name":"白銀の城の竜飾灯","detail":"【 悪魔族 ／ 効果 】","effect":"このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：手札・フィールドのこのカードを墓地へ送り、手札を１枚捨てて発動できる。手札・デッキから「ラビュリンス」魔法・罠カード１枚を選んで自分フィールドにセットする。この効果は相手ターンでも発動できる。②：このカードが墓地に存在する状態で、自分の通常罠カードの効果でモンスターがフィールドから離れた場合に発動できる。このカードを手札に加える。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/白銀の城の竜飾灯.png"},
+    {"name":"タタカワナイト","detail":"【 戦士族 ／ 効果 】","effect":"相手のカードの効果によって自分の魔法・罠カードの発動が無効になった場合、このカードを手札から墓地へ送って発動できる。相手ライフに１５００ポイントダメージを与える。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/タタカワナイト.png"},
     {"name":"封印されしエクゾディア","detail":"【 魔法使い族 ／ 効果 】","effect":"このカードと「封印されし者の右腕」「封印されし者の左腕」「封印されし者の右足」「封印されし者の左足」が手札に全て揃った時、自分はデュエルに勝利する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/封印されしエクゾディア.png"},
     {"name":"妖眼の相剣師","detail":"【 魔法使い族 ／ 効果 】","effect":"このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：効果が無効化されているモンスターがフィールドに存在する場合、自分・相手のメインフェイズに発動できる。このカードを手札から特殊召喚する。②：相手がモンスターを特殊召喚した場合、そのモンスターをどこから特殊召喚したかによって以下の効果から１つを選択して発動できる。●手札：手札からモンスター１体を特殊召喚する。●デッキ：自分はデッキから２枚ドローする。●EXデッキ：EXデッキから特殊召喚されたそのモンスター１体を選んで破壊する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/妖眼の相剣師.png"},
     {"name":"雷電龍－サンダー・ドラゴン","detail":"【 雷族 ／ 効果 】","effect":"このカード名の①②の効果は１ターンに１度、いずれか１つしか使用できない。①：自分・相手ターンに、このカードを手札から捨てて発動できる。デッキから「雷電龍－サンダー・ドラゴン」１体を手札に加える。②：このカードが除外された場合、またはフィールドから墓地へ送られた場合に発動できる。デッキから「雷電龍－サンダー・ドラゴン」以外の「サンダー・ドラゴン」カード１枚を手札に加える。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/雷電龍－サンダー・ドラゴン.png"},
@@ -1197,17 +1346,14 @@ createThemeBox(
     {"name":"Emダメージ・ジャグラー","detail":"【 魔法使い族 ／ 効果 】","effect":"このカード名の③の効果は１ターンに１度しか使用できない。①：自分にダメージを与える魔法・罠・モンスターの効果が発動した時、このカードを手札から捨てて発動できる。その発動を無効にし破壊する。②：自分・相手のバトルフェイズに、このカードを手札から捨てて発動できる。このターン、自分が受ける戦闘ダメージは１度だけ０になる。③：墓地のこのカードを除外して発動できる。デッキから「Emダメージ・ジャグラー」以外の「Em」モンスター１体を手札に加える。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/Emダメージ・ジャグラー.png"},
     {"name":"ハネワタ","detail":"【 天使族 ／ チューナー ／ 効果 】","effect":"①：このカードを手札から捨てて発動できる。このターン、自分が受ける効果ダメージは０になる。この効果は相手ターンでも発動できる。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ハネワタ.png"},
     {"name":"スモーク・モスキート","detail":"【 昆虫族 ／ 効果 】","effect":"このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：相手モンスターの攻撃で自分が戦闘ダメージを受けるダメージ計算時に発動できる。このカードを手札から特殊召喚し、その戦闘で発生する自分への戦闘ダメージは半分になり、そのダメージステップ終了後にバトルフェイズを終了する。②：自分フィールドの表側表示モンスター１体を対象として発動できる。このカードのレベルはターン終了時までそのモンスターと同じになる。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/スモーク・モスキート.png"},
-    {"name":"BF－蒼天のジェット","detail":"【 鳥獣族 ／ 効果 】","effect":"戦闘ダメージ計算時、このカードを手札から墓地へ送って発動する。自分フィールド上に存在する「BF」と名のついたモンスターはその戦闘では破壊されない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/BF－蒼天のジェット.png"},
     {"name":"D-HERO ダイナマイトガイ","detail":"【 戦士族 ／ 効果 】","effect":"①：モンスターが戦闘を行うダメージ計算時にこのカードを手札から捨てて発動できる。その戦闘で発生する自分への戦闘ダメージは０になり、お互いのプレイヤーは１０００ダメージを受ける。②：墓地のこのカードを除外し、自分フィールドの「D-HERO」モンスター１体を対象として発動できる。そのモンスターの攻撃力は次の相手ターン終了時まで１０００アップする。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/D-HERO ダイナマイトガイ.png"},
     {"name":"EMバリアバルーンバク","detail":"【 獣族 ／ 効果 】","effect":"「EMバリアバルーンバク」の②の効果は１ターンに１度しか使用できない。①：自分のモンスターが相手モンスターと戦闘を行うダメージ計算時、このカードを手札から捨てて発動できる。その戦闘で発生するお互いの戦闘ダメージは０になる。②：このカードが墓地に存在する場合、相手モンスターの直接攻撃宣言時に手札から「EM」モンスター１体を捨てて発動できる。このカードを墓地から守備表示で特殊召喚する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/EMバリアバルーンバク.png"},
     {"name":"Emフレイム・イーター","detail":"【 魔法使い族 ／ 効果 】","effect":"①：自分にダメージを与える魔法・罠・モンスターの効果が発動した時に発動できる。このカードを手札から特殊召喚し、その効果で自分が受けるダメージを０にする。このターン、自分は「Em」モンスターしか特殊召喚できない。この効果で特殊召喚したこのカードは、フィールドから離れた場合に除外される。②：このカードが召喚・特殊召喚に成功した場合に発動する。お互いのプレイヤーは５００ダメージを受ける。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/Emフレイム・イーター.png"},
     {"name":"EMレインゴート","detail":"【 獣族 ／ 効果 】","effect":"①：自分にダメージを与える魔法・罠・モンスターの効果が発動した時、このカードを手札から捨てて発動できる。その効果で自分が受けるダメージを０にする。②：自分・相手のメインフェイズにこのカードを手札から捨て、自分フィールドの「EM」カードまたは「オッドアイズ」カード１枚を対象として発動できる。このターン、そのカードは戦闘・効果では破壊されない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/EMレインゴート.png"},
     {"name":"H・C ソード・シールド","detail":"【 戦士族 ／ 効果 】","effect":"自分フィールド上に「ヒロイック」と名のついたモンスターが存在する場合、このカードを手札から墓地へ送って発動できる。このターン、戦闘によって発生する自分への戦闘ダメージは０になり、自分フィールド上の「ヒロイック」と名のついたモンスターは戦闘では破壊されない。この効果は相手ターンでも発動できる。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/H・C ソード・シールド.png"},
-    {"name":"WW－ブリザード・ベル","detail":"【 魔法使い族 ／ チューナー ／ 効果 】","effect":"このカード名の②の効果は１ターンに１度しか使用できない。①：自分フィールドのモンスターが、存在しない場合または「WW」モンスターのみの場合、このカードはリリースなしで召喚できる。②：自分フィールドに「WW－ブリザード・ベル」以外の「WW」モンスターが存在する場合、相手メインフェイズに、手札・フィールドのこのカードを墓地へ送って発動できる。相手に５００ダメージを与える。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/WW－ブリザード・ベル.png"},
     {"name":"アチャチャチャンバラー","detail":"【 戦士族 ／ 効果 】","effect":"ライフポイントにダメージを与える魔法・罠・効果モンスターの効果が発動した時に発動できる。このカードを手札から特殊召喚し、相手ライフに４００ポイントダメージを与える。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/アチャチャチャンバラー.png"},
     {"name":"アルカナフォースⅩⅣ－TEMPERANCE","detail":"【 天使族 ／ 効果 】","effect":"戦闘ダメージ計算時、このカードを手札から捨てて発動できる。その戦闘によって発生する自分への戦闘ダメージは０になる。このカードが召喚・反転召喚・特殊召喚に成功した時、コイントスを１回行い、その裏表によって以下の効果を得る。●表：このカードがフィールド上に表側表示で存在する限り、自分が受ける戦闘ダメージは半分になる。●裏：このカードがフィールド上に表側表示で存在する限り、相手が受ける戦闘ダメージは半分になる。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/アルカナフォースⅩⅣ－TEMPERANCE.png"},
     {"name":"エクストラ・ヴェーラー","detail":"【 魔法使い族 ／ 効果 】","effect":"相手がモンスターを特殊召喚した時、手札からこのカードを特殊召喚する事ができる。この効果で特殊召喚したターン、相手のカードの効果によって発生する自分への効果ダメージは代わりに相手が受ける。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/エクストラ・ヴェーラー.png"},
-    {"name":"ガード・ヘッジ","detail":"【 植物族 ／ 効果 】","effect":"自分フィールド上のモンスターが戦闘を行うダメージ計算時、このカードを手札から墓地へ送って発動できる。その自分のモンスターはその戦闘では破壊されず、エンドフェイズ時まで攻撃力は半分になる。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ガード・ヘッジ.png"},
     {"name":"ガード・ペンギン","detail":"【 鳥獣族 ／ 効果 】","effect":"カードの効果によって自分がダメージを受けた時に発動できる。このカードを手札から特殊召喚し、受けたダメージの数値分だけ自分のライフポイントを回復する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ガード・ペンギン.png"},
     {"name":"クリアクリボー","detail":"【 天使族 ／ 効果 】","effect":"このカード名の②の効果は１ターンに１度しか使用できない。①：ダメージを与えるモンスターの効果を相手が発動した時、このカードを手札から捨てて発動できる。その発動を無効にする。②：相手モンスターの直接攻撃宣言時、墓地のこのカードを除外して発動できる。自分はデッキから１枚ドローする。そのドローしたカードがモンスターだった場合、さらにそのモンスターを特殊召喚できる。その後、攻撃対象をそのモンスターに移し替える。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/クリアクリボー.png"},
     {"name":"クリボー","detail":"【 悪魔族 ／ 効果 】","effect":"①：相手モンスターの攻撃で自分が戦闘ダメージを受けるダメージ計算時に、このカードを手札から捨てて発動できる。その戦闘で発生する自分への戦闘ダメージを０にする。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/クリボー.png"},
@@ -1215,24 +1361,13 @@ createThemeBox(
     {"name":"シャブティのお守り","detail":"【 岩石族 ／ 効果 】","effect":"手札からこのカードを捨てる。エンドフェイズまで、自分フィールド上の「墓守の」という名のついたモンスターカードが受ける戦闘ダメージを０にする。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/シャブティのお守り.png"},
     {"name":"ジャンクリボー","detail":"【 機械族 ／ 効果 】","effect":"①：自分にダメージを与える魔法・罠・モンスターの効果を相手が発動した時、自分の手札・フィールドのこのカードを墓地へ送って発動できる。その発動を無効にし破壊する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ジャンクリボー.png"},
     {"name":"スピードローダー・ドラゴン","detail":"【 ドラゴン族 ／ 効果 】","effect":"このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：自分が効果ダメージを受けた時に発動できる。このカードを手札から特殊召喚する。その後、自分が受けたダメージと同じ数値分のダメージを相手に与え、与えたダメージの半分だけ自分のLPを回復する。②：このカードがアドバンス召喚に成功した時に発動できる。デッキから「ヴァレット」モンスター２体を手札に加える（同名カードは１枚まで）。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/スピードローダー・ドラゴン.png"},
-    {"name":"ダイナレスラー・マーシャルアンペロ","detail":"【 恐竜族 ／ 効果 】","effect":"このカード名の②の効果は１ターンに１度しか使用できない。①：自分の他の「ダイナレスラー」モンスターが、その攻撃力以上の攻撃力を持つ相手モンスターと戦闘を行うダメージ計算時、手札・フィールドのこのカードを墓地へ送って発動できる。その自分のモンスターはその戦闘では破壊されず、その戦闘で発生する自分への戦闘ダメージは半分になる。②：相手モンスターの攻撃宣言時に墓地のこのカードを除外して発動できる。デッキから「ダイナレスラー・マーシャルアンペロ」以外の「ダイナレスラー」モンスター１体を手札に加える。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ダイナレスラー・マーシャルアンペロ.png"},
-    {"name":"タタカワナイト","detail":"【 戦士族 ／ 効果 】","effect":"相手のカードの効果によって自分の魔法・罠カードの発動が無効になった場合、このカードを手札から墓地へ送って発動できる。相手ライフに１５００ポイントダメージを与える。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/タタカワナイト.png"},
     {"name":"ダメージ・メイジ","detail":"【 魔法使い族 ／ 効果 】","effect":"カードの効果によって自分がダメージを受けた時に発動できる。このカードを手札から特殊召喚し、受けたダメージの数値分だけ自分のライフポイントを回復する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ダメージ・メイジ.png"},
-    {"name":"ディメンション・ワンダラー","detail":"【 魔法使い族 ／ 効果 】","effect":"「銀河眼の光子竜」の効果によってモンスターがゲームから除外された時、このカードを手札から墓地へ送って発動できる。相手ライフに３０００ポイントダメージを与える。「ディメンション・ワンダラー」の効果は１ターンに１度しか使用できない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ディメンション・ワンダラー.png"},
-    {"name":"トリックスター・ナルキッス","detail":"【 天使族 ／ 効果 】","effect":"このカード名の①の効果は１ターンに１度しか使用できない。①：相手が効果ダメージを受けた場合に発動できる。このカードを手札から特殊召喚する。②：このカードがモンスターゾーンに存在する限り、相手が手札・墓地のモンスターの効果を発動する度に、相手に２００ダメージを与える。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/トリックスター・ナルキッス.png"},
     {"name":"ドンヨリボー＠イグニスター","detail":"【 サイバース族 ／ 効果 】","effect":"このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：自分の「＠イグニスター」モンスターが攻撃されたダメージ計算時にこのカードを手札から捨てて発動できる。その戦闘で発生する自分への戦闘ダメージを０にする。②：「＠イグニスター」モンスターまたは「Ai」魔法・罠カードの、相手にダメージを与える効果が発動した時、墓地のこのカードを除外して発動できる（ダメージステップでも発動可能）。その効果で相手に与えるダメージは倍になる。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ドンヨリボー＠イグニスター.png"},
     {"name":"バリア・リゾネーター","detail":"【 悪魔族 ／ チューナー ／ 効果 】","effect":"このカードを手札から墓地へ送り、自分フィールド上に表側表示で存在するチューナー１体を選択して発動する。選択したモンスターはこのターン戦闘では破壊されず、選択したモンスターの戦闘によって発生する自分への戦闘ダメージは０になる。この効果は相手ターンでも発動する事ができる。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/バリア・リゾネーター.png"},
-    {"name":"ファイヤークラッカー","detail":"【 悪魔族 ／ 効果 】","effect":"「ファイヤークラッカー」の①の効果は１ターンに１度しか使用できない。①：このカードを手札から捨てて発動できる。相手に１０００ダメージを与え、次の自分ドローフェイズをスキップする。この効果は相手ターンでも発動できる。②：このカードがモンスターゾーンに存在する限り、相手が効果ダメージを受ける度にこのカードにカウンターを１つ置く。③：自分・相手のエンドフェイズに発動する。このカードのカウンターを全て取り除き、その数×３００ダメージを相手に与える。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ファイヤークラッカー.png"},
-    {"name":"メメント・ゴブリン","detail":"【 悪魔族 ／ 効果 】","effect":"このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：自分・相手のメインフェイズに、自分フィールドに「冥骸合竜－メメントラル・テクトリカ」が存在する場合、このカードを手札から捨てて発動できる。このターン中、自分フィールドの「メメント」モンスターを相手は効果の対象にできない。②：自分メインフェイズに発動できる。自分フィールドの「メメント」モンスター１体を破壊し、デッキから「メメント・ゴブリン」以外の「メメント」カードを２枚まで墓地へ送る（同名カードは１枚まで）。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/メメント・ゴブリン.png"},
     {"name":"ライフ・コーディネイター","detail":"【 サイキック族 ／ 効果 】","effect":"相手が「ライフポイントにダメージを与える効果」を持つカードを発動した時、手札からこのカードを捨てる事でその発動を無効にし破壊する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ライフ・コーディネイター.png"},
     {"name":"レスキュー・インターレーサー","detail":"【 サイバース族 ／ 効果 】","effect":"このカード名の①の効果は１ターンに１度しか使用できない。①：自分のサイバース族モンスターが攻撃されたダメージ計算時にこのカードを手札から捨てて発動できる。その戦闘で発生する自分への戦闘ダメージを０にする。②：このカードがこのカードの効果を発動するために墓地へ捨てられたターンのエンドフェイズに発動する。このカードを特殊召喚する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/レスキュー・インターレーサー.png"},
-    {"name":"レッド・ガードナー","detail":"【 悪魔族 ／ 効果 】","effect":"①：自分フィールドに「レッド・デーモン」モンスターが存在し、相手の魔法・罠・モンスターの効果が発動した時、このカードを手札から墓地へ送って発動できる。このターン、自分フィールドのモンスターは相手の効果では破壊されない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/レッド・ガードナー.png"},
     {"name":"海晶乙女クラウンテイル","detail":"【 サイバース族 ／ 効果 】","effect":"このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：モンスター同士が戦闘を行うダメージ計算時に、手札からこのカード以外の「マリンセス」モンスター１体を墓地へ送って発動できる。このカードを手札から特殊召喚し、その戦闘で発生する自分への戦闘ダメージは半分になる。②：相手モンスターが攻撃するダメージステップ開始時に、墓地のこのカードを除外して発動できる。このターン自分は、自分の墓地の「マリンセス」リンクモンスターのリンクマーカーの合計×１０００以下の戦闘ダメージを受けない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/海晶乙女クラウンテイル.png"},
     {"name":"剛鬼マンジロック","detail":"【 戦士族 ／ 効果 】","effect":"このカード名の③の効果は１ターンに１度しか使用できない。①：相手モンスターが攻撃した場合、そのダメージ計算時にこのカードを手札から捨てて発動できる。その戦闘で発生する自分への戦闘ダメージは半分になる。②：自分にダメージを与える効果を相手が発動した時、このカードを手札から捨てて発動できる（ダメージステップでも発動可能）。その効果で自分が受けるダメージは半分になる。③：このカードがフィールドから墓地へ送られた場合に発動できる。デッキから「剛鬼マンジロック」以外の「剛鬼」カード１枚を手札に加える。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/剛鬼マンジロック.png"},
-    {"name":"紫炎の寄子","detail":"【 戦士族 ／ チューナー ／ 効果 】","effect":"自分フィールド上に存在する「六武衆」と名のついたモンスターが戦闘を行う場合、そのダメージ計算時にこのカードを手札から墓地へ送って発動する。そのモンスターはこのターン戦闘では破壊されない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/紫炎の寄子.png"},
-    {"name":"超重武者装留ファイヤー・アーマー","detail":"【 機械族 ／ 効果 】","effect":"①：自分メインフェイズに自分フィールドの「超重武者」モンスター１体を対象として発動できる。自分の手札・フィールドからこのモンスターを装備カード扱いとしてその自分のモンスターに装備する。装備モンスターのレベルは５になる。②：このカードを手札から捨て、自分フィールドの守備表示の「超重武者」モンスター１体を対象として発動できる。ターン終了時まで、そのモンスターの守備力は８００ダウンし、戦闘・効果では破壊されない。この効果は相手ターンでも発動できる。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/超重武者装留ファイヤー・アーマー.png"},
-    {"name":"転生炎獣ラクーン","detail":"【 サイバース族 ／ 効果 】","effect":"このカード名の②の効果は１ターンに１度しか使用できない。①：自分の「サラマングレイト」モンスターが相手モンスターの攻撃対象に選択された時、このカードを手札から墓地へ送り、その戦闘を行うモンスター２体を対象として発動できる。対象の相手モンスターの攻撃力分だけ自分のLPを回復する。このターン、対象の自分のモンスターは戦闘では破壊されない。②：このカードが墓地に存在し、自分の「サラマングレイト」モンスターが戦闘で相手モンスターを破壊し墓地へ送った時に発動できる。このカードを手札に加える。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/転生炎獣ラクーン.png"},
-    {"name":"氷河のアクア・マドール","detail":"【 魔法使い族 ／ 効果 】","effect":"①：自分の通常モンスターが相手モンスターと戦闘を行うダメージステップ開始時に、手札のこのカードを相手に見せて発動できる。自分の手札を１枚選んで捨て、その自分のモンスターはその戦闘では破壊されない。②：このカードが相手モンスターと戦闘を行うダメージステップ開始時に、手札の通常モンスター１体を相手に見せて発動できる。自分の手札を１枚選んで捨て、その相手モンスターを破壊する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/氷河のアクア・マドール.png"},
     {"name":"DDD反骨王レオニダス","detail":"【 悪魔族 ／ ペンデュラム ／ 効果 】","effect":"①：自分が効果ダメージを受けた時に発動できる。このカードを手札から特殊召喚し、受けたダメージの数値分だけ自分のLPを回復する。②：このカードがモンスターゾーンに存在する限り、自分が受ける効果ダメージは０になる。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/DDD反骨王レオニダス.png"}
   ]
 );
@@ -1290,6 +1425,7 @@ createThemeBox(
     {"name":"チェックサム・ドラゴン","detail":"【 ドラゴン族 ／ 効果 】","effect":"①：相手モンスターの攻撃宣言時に発動できる。このカードを手札から特殊召喚する。その後、このカードの守備力の半分だけ自分のLPを回復する。②：攻撃表示のこのカードは戦闘では破壊されない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/チェックサム・ドラゴン.png"},
     {"name":"チョバムアーマー・ドラゴン","detail":"【 ドラゴン族 ／ 効果 】","effect":"このカード名の②の効果は１ターンに１度しか使用できない。①：相手モンスターの直接攻撃宣言時に発動できる。このカードを手札から攻撃表示で特殊召喚する。このターン、この効果で特殊召喚したこのカードは戦闘では破壊されず、このカードの戦闘で発生する自分への戦闘ダメージは半分になる。②：このカードがリンク素材として墓地へ送られた場合、このカード以外の自分の墓地の闇属性モンスター１体を対象として発動できる。そのモンスターを手札に加える。相手は自身の墓地のモンスター１体を選んで手札に加える事ができる。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/チョバムアーマー・ドラゴン.png"},
     {"name":"テュアラティン","detail":"【 天使族 ／ 効果 】","effect":"相手のバトルフェイズ時に発動する事ができる。バトルフェイズ開始時に自分フィールド上にモンスターが２体以上存在し、それらのモンスターが１度のバトルフェイズ中に戦闘によって全て破壊され墓地へ送られた時、このカードを手札から特殊召喚する事ができる。この効果で特殊召喚に成功した時、属性を１つ宣言し、フィールド上に表側表示で存在する宣言した属性のモンスターを全て破壊する。その後、このカードがフィールド上に表側表示で存在する限り、相手は宣言された属性のモンスターを召喚・特殊召喚する事ができない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/テュアラティン.png"},
+    {"name":"ディメンション・ワンダラー","detail":"【 魔法使い族 ／ 効果 】","effect":"「銀河眼の光子竜」の効果によってモンスターがゲームから除外された時、このカードを手札から墓地へ送って発動できる。相手ライフに３０００ポイントダメージを与える。「ディメンション・ワンダラー」の効果は１ターンに１度しか使用できない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ディメンション・ワンダラー.png"},
     {"name":"パーリィナイツ","detail":"【 戦士族 ／ 効果 】","effect":"①：相手モンスターの攻撃で自分が戦闘ダメージを受けた時に発動できる。このカードを手札から特殊召喚する。その後、受けたダメージの数値以下の攻撃力を持つモンスター１体を手札から特殊召喚できる。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/パーリィナイツ.png"},
     {"name":"ビック・バイパー T３０１","detail":"【 機械族 ／ 効果 】","effect":"このカード名の①の効果は１ターンに１度しか使用できない。①：このカードが手札・墓地に存在し、自分の表側表示モンスターが相手モンスターと戦闘を行う攻撃宣言時に発動できる。このカードを特殊召喚する。この効果で特殊召喚したこのカードは、フィールドから離れた場合に除外される。②：このカード以外の自分フィールドの機械族・光属性モンスターの攻撃力は１２００アップする。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ビック・バイパー T３０１.png"},
     {"name":"フォトン・ジャンパー","detail":"【 戦士族 ／ 効果 】","effect":"このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：相手モンスターの攻撃宣言時に発動できる。このカードを手札から特殊召喚する。その後、バトルフェイズを終了する。この効果を発動した場合、次の自分バトルフェイズをスキップする。②：このカードが墓地へ送られた場合に発動できる。デッキから「フォトン」魔法・罠カードか「ギャラクシー」魔法・罠カード１枚を手札に加える。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/フォトン・ジャンパー.png"},
@@ -1321,10 +1457,10 @@ createThemeBox(
     {"name":"DDオルトロス","detail":"【 悪魔族 ／ ペンデュラム ／ チューナー ／ 効果 】","effect":"①：自分が戦闘・効果でダメージを受けた時に発動できる。このカードを手札から特殊召喚する。②：このカードが特殊召喚した時に適用する。このターン、自分は悪魔族モンスターしか特殊召喚できない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/DDオルトロス.png"},
     {"name":"EMオッドアイズ・ディゾルヴァー","detail":"【 魔法使い族 ／ ペンデュラム ／ 効果 】","effect":"このカード名の①のモンスター効果は１ターンに１度しか使用できない。①：自分のPモンスターが相手モンスターと戦闘を行うダメージステップ開始時に発動できる。このカードを手札から特殊召喚し、その自分のモンスターはその戦闘では破壊されない。②：自分メインフェイズに発動できる。融合モンスターカードによって決められた、このカードを含む融合素材モンスターを自分フィールドから墓地へ送り、その融合モンスター１体をEXデッキから融合召喚する。その際、自分のPゾーンに存在する融合素材モンスターも融合素材に使用できる。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/EMオッドアイズ・ディゾルヴァー.png"},
     {"name":"ヴァルキュルスの影霊衣","detail":"【 魔法使い族 ／ 儀式 ／ 効果 】","effect":"「影霊衣」儀式魔法カードにより降臨。レベル８以外のモンスターのみを使用した儀式召喚でしか特殊召喚できない。「ヴァルキュルスの影霊衣」の①②の効果はそれぞれ１ターンに１度しか使用できない。①：相手モンスターの攻撃宣言時に自分の墓地の「影霊衣」カード１枚を除外し、このカードを手札から捨てて発動できる。その攻撃を無効にし、その後バトルフェイズを終了する。②：自分メインフェイズに発動できる。自分の手札・フィールドのモンスターを２体までリリースし、リリースした数だけ自分はデッキからドローする。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ヴァルキュルスの影霊衣.png"},
-    {"name":"ブラック・ソニック","detail":"罠","text":"自分フィールドのモンスターが「BF」モンスター３体のみの場合、このカードの発動は手札からもできる。①：相手モンスターが自分フィールドの「BF」モンスターに攻撃宣言した時に発動できる。相手フィールドの表側攻撃表示モンスターを全て除外する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ブラック・ソニック.png"},
-    {"name":"ロード・オブ・ザ・タキオンギャラクシー","detail":"罠","text":"このカード名のカードは１ターンに１枚しか発動できない。自分フィールドに「ギャラクシーアイズ・タキオン・ドラゴン」モンスターが存在する場合、このカードの発動は手札からもできる。①：自分・相手のバトルフェイズに、自分フィールドの「ギャラクシーアイズ」XモンスターのX素材を１つ取り除いて発動できる（自分フィールドに「CNo.」モンスターが存在する場合、このカードの発動と効果は無効化されない）。このターンに召喚・特殊召喚された相手フィールドのモンスターを全てデッキに戻す。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ロード・オブ・ザ・タキオンギャラクシー.png"},
-    {"name":"海晶乙女潮流","detail":"罠","text":"このカード名のカードは１ターンに１枚しか発動できない。自分フィールドにリンク３以上の「マリンセス」モンスターが存在する場合、このカードの発動は手札からもできる。①：自分の「マリンセス」リンクモンスターが戦闘で相手モンスターを破壊した時に発動できる。その自分のモンスターのリンクマーカーの数×４００ダメージを相手に与える。自分フィールドにリンク２以上の「マリンセス」モンスターが存在し、相手リンクモンスターを破壊した場合には、破壊されたモンスターのリンクマーカーの数×５００ダメージをさらに相手に与える。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/海晶乙女潮流.png"},
-    {"name":"拮抗勝負","detail":"罠","text":"自分フィールドにカードが存在しない場合、このカードの発動は手札からもできる。①：相手フィールドのカードの数が自分フィールドのカードより多い場合、自分・相手のバトルフェイズ終了時に発動できる。自分フィールドのカードの数と同じになるように、相手は自身のフィールドのカードを裏側で除外しなければならない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/拮抗勝負.png"}
+    {"name":"ブラック・ソニック","detail": "【罠】","effect":"自分フィールドのモンスターが「BF」モンスター３体のみの場合、このカードの発動は手札からもできる。①：相手モンスターが自分フィールドの「BF」モンスターに攻撃宣言した時に発動できる。相手フィールドの表側攻撃表示モンスターを全て除外する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ブラック・ソニック.png"},
+    {"name":"ロード・オブ・ザ・タキオンギャラクシー","detail": "【罠】","effect":"このカード名のカードは１ターンに１枚しか発動できない。自分フィールドに「ギャラクシーアイズ・タキオン・ドラゴン」モンスターが存在する場合、このカードの発動は手札からもできる。①：自分・相手のバトルフェイズに、自分フィールドの「ギャラクシーアイズ」XモンスターのX素材を１つ取り除いて発動できる（自分フィールドに「CNo.」モンスターが存在する場合、このカードの発動と効果は無効化されない）。このターンに召喚・特殊召喚された相手フィールドのモンスターを全てデッキに戻す。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ロード・オブ・ザ・タキオンギャラクシー.png"},
+    {"name":"海晶乙女潮流","detail": "【罠】","effect":"このカード名のカードは１ターンに１枚しか発動できない。自分フィールドにリンク３以上の「マリンセス」モンスターが存在する場合、このカードの発動は手札からもできる。①：自分の「マリンセス」リンクモンスターが戦闘で相手モンスターを破壊した時に発動できる。その自分のモンスターのリンクマーカーの数×４００ダメージを相手に与える。自分フィールドにリンク２以上の「マリンセス」モンスターが存在し、相手リンクモンスターを破壊した場合には、破壊されたモンスターのリンクマーカーの数×５００ダメージをさらに相手に与える。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/海晶乙女潮流.png"},
+    {"name":"拮抗勝負","detail": "【罠】","effect":"自分フィールドにカードが存在しない場合、このカードの発動は手札からもできる。①：相手フィールドのカードの数が自分フィールドのカードより多い場合、自分・相手のバトルフェイズ終了時に発動できる。自分フィールドのカードの数と同じになるように、相手は自身のフィールドのカードを裏側で除外しなければならない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/拮抗勝負.png"}
   ]
 );
 //破壊除去トリガーSS
@@ -1480,14 +1616,23 @@ createThemeBox(
     {"name":"アルグールマゼラ","detail":"【 アンデット族 ／ 効果 】","effect":"このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：自分フィールドのアンデット族モンスターが戦闘・効果で破壊される場合、代わりに手札・墓地のこのカードを除外できる。②：このカードが手札・墓地から除外された場合に発動できる。このカードを守備表示で特殊召喚する。その後、このカードのレベルを１つ下げる事ができる。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/アルグールマゼラ.png"},
     {"name":"ダイナレスラー・マーシャルアンガ","detail":"【 恐竜族 ／ 効果 】","effect":"①：自分の「ダイナレスラー」モンスターが、その攻撃力以上の攻撃力を持つモンスターと戦闘を行うダメージ計算時、このカードを手札から墓地へ送って発動できる。その自分のモンスターはその戦闘では破壊されず、そのダメージステップ終了後にバトルフェイズを終了する。②：このカードがこのカードの効果を発動するために墓地へ送られたターンのエンドフェイズに、相手フィールドのモンスターの数が自分フィールドのモンスターより多い場合に発動できる。このカードを特殊召喚する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ダイナレスラー・マーシャルアンガ.png"},
     {"name":"ダイナレスラー・マーシャルアンキロ","detail":"【 恐竜族 ／ 効果 】","effect":"このカード名の②の効果は１ターンに１度しか使用できない。①：このカード以外の自分の「ダイナレスラー」モンスターが相手モンスターと戦闘を行うダメージ計算時、手札・フィールドのこのカードを墓地へ送って発動できる。その自分のモンスターはその戦闘では破壊されず、その相手モンスターの攻撃力はダメージステップ終了時に半分になる。②：このカードがフィールドから墓地へ送られたターンのエンドフェイズに発動できる。このカードを特殊召喚する。この効果で特殊召喚したこのカードは、フィールドから離れた場合に除外される。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ダイナレスラー・マーシャルアンキロ.png"},
+    {"name":"ダイナレスラー・マーシャルアンペロ","detail":"【 恐竜族 ／ 効果 】","effect":"このカード名の②の効果は１ターンに１度しか使用できない。①：自分の他の「ダイナレスラー」モンスターが、その攻撃力以上の攻撃力を持つ相手モンスターと戦闘を行うダメージ計算時、手札・フィールドのこのカードを墓地へ送って発動できる。その自分のモンスターはその戦闘では破壊されず、その戦闘で発生する自分への戦闘ダメージは半分になる。②：相手モンスターの攻撃宣言時に墓地のこのカードを除外して発動できる。デッキから「ダイナレスラー・マーシャルアンペロ」以外の「ダイナレスラー」モンスター１体を手札に加える。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ダイナレスラー・マーシャルアンペロ.png"},
     {"name":"幻創のミセラサウルス","detail":"【 恐竜族 ／ 効果 】","effect":"このカード名の②の効果は１ターンに１度しか使用できない。①：自分・相手のメインフェイズに、このカードを手札から墓地へ送って発動できる。このメインフェイズ中、自分フィールドの恐竜族モンスターは相手が発動した効果を受けない。②：自分の墓地からこのカードを含む恐竜族モンスターを任意の数だけ除外して発動できる。除外したモンスターの数と同じレベルを持つ恐竜族モンスター１体をデッキから特殊召喚する。この効果で特殊召喚したモンスターはエンドフェイズに破壊される。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/幻創のミセラサウルス.png"},
     {"name":"遮断機塊ブレイカーバンクル","detail":"【 機械族 ／ 効果 】","effect":"①：自分の「機塊」モンスターが相手モンスターと戦闘を行うダメージ計算時に、このカードを手札から捨てて発動できる。その自分のモンスターはその戦闘では破壊されず、その戦闘で発生する自分への戦闘ダメージは０になる。②：自分フィールドの「機塊」モンスターが効果で破壊される場合、代わりにフィールド・墓地のこのカードを除外できる。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/遮断機塊ブレイカーバンクル.png"},
     {"name":"先史遺産アカンバロの土偶","detail":"【 岩石族 ／ 効果 】","effect":"このカード名の②の効果は１ターンに１度しか使用できない。①：自分フィールドの「先史遺産」モンスターが戦闘または相手の効果で破壊される場合、代わりに手札のこのカードを捨てる事ができる。②：このカードが墓地に存在する場合、１０００LPを払って発動できる。このカードを特殊召喚する。この効果で特殊召喚したこのカードはエンドフェイズに持ち主の手札に戻る。この効果を発動するターン、自分は「先史遺産」モンスターしか特殊召喚できない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/先史遺産アカンバロの土偶.png"},
+    {"name":"ガード・ヘッジ","detail":"【 植物族 ／ 効果 】","effect":"自分フィールド上のモンスターが戦闘を行うダメージ計算時、このカードを手札から墓地へ送って発動できる。その自分のモンスターはその戦闘では破壊されず、エンドフェイズ時まで攻撃力は半分になる。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ガード・ヘッジ.png"},
     {"name":"堕天使テスカトリポカ","detail":"【 天使族 ／ 効果 】","effect":"自分は「堕天使テスカトリポカ」を１ターンに１度しか特殊召喚できず、その②の効果は１ターンに１度しか使用できない。①：自分フィールドの「堕天使」モンスターが戦闘・効果で破壊される場合、代わりに手札のこのカードを捨てる事ができる。②：１０００LPを払い、自分の墓地の「堕天使」魔法・罠カード１枚を対象として発動できる。その魔法・罠カードの効果を適用する。その後、墓地のそのカードをデッキに戻す。この効果は相手ターンでも発動できる。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/堕天使テスカトリポカ.png"},
     {"name":"ワイトベイキング","detail":"【 アンデット族 ／ 効果 】","effect":"このカード名の③の効果は１ターンに１度しか使用できない。①：このカードのカード名は、墓地に存在する限り「ワイト」として扱う。②：自分フィールドのレベル３以下のアンデット族モンスターが戦闘・効果で破壊される場合、代わりに手札のこのカードを捨てる事ができる。③：このカードが墓地へ送られた場合に発動できる。デッキから以下のモンスターを合計２体手札に加える（同名カードは１枚まで）。その後、手札を１枚選んで捨てる。●「ワイト」●「ワイトベイキング」以外の「ワイト」のカード名が記されたモンスター","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ワイトベイキング.png"},
+    {"name":"レッド・ガードナー","detail":"【 悪魔族 ／ 効果 】","effect":"①：自分フィールドに「レッド・デーモン」モンスターが存在し、相手の魔法・罠・モンスターの効果が発動した時、このカードを手札から墓地へ送って発動できる。このターン、自分フィールドのモンスターは相手の効果では破壊されない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/レッド・ガードナー.png"},
+    {"name":"メメント・ゴブリン","detail":"【 悪魔族 ／ 効果 】","effect":"このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：自分・相手のメインフェイズに、自分フィールドに「冥骸合竜－メメントラル・テクトリカ」が存在する場合、このカードを手札から捨てて発動できる。このターン中、自分フィールドの「メメント」モンスターを相手は効果の対象にできない。②：自分メインフェイズに発動できる。自分フィールドの「メメント」モンスター１体を破壊し、デッキから「メメント・ゴブリン」以外の「メメント」カードを２枚まで墓地へ送る（同名カードは１枚まで）。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/メメント・ゴブリン.png"},
+    {"name":"紫炎の寄子","detail":"【 戦士族 ／ チューナー ／ 効果 】","effect":"自分フィールド上に存在する「六武衆」と名のついたモンスターが戦闘を行う場合、そのダメージ計算時にこのカードを手札から墓地へ送って発動する。そのモンスターはこのターン戦闘では破壊されない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/紫炎の寄子.png"},
+    {"name":"氷河のアクア・マドール","detail":"【 魔法使い族 ／ 効果 】","effect":"①：自分の通常モンスターが相手モンスターと戦闘を行うダメージステップ開始時に、手札のこのカードを相手に見せて発動できる。自分の手札を１枚選んで捨て、その自分のモンスターはその戦闘では破壊されない。②：このカードが相手モンスターと戦闘を行うダメージステップ開始時に、手札の通常モンスター１体を相手に見せて発動できる。自分の手札を１枚選んで捨て、その相手モンスターを破壊する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/氷河のアクア・マドール.png"},
+    {"name":"超重武者装留ファイヤー・アーマー","detail":"【 機械族 ／ 効果 】","effect":"①：自分メインフェイズに自分フィールドの「超重武者」モンスター１体を対象として発動できる。自分の手札・フィールドからこのモンスターを装備カード扱いとしてその自分のモンスターに装備する。装備モンスターのレベルは５になる。②：このカードを手札から捨て、自分フィールドの守備表示の「超重武者」モンスター１体を対象として発動できる。ターン終了時まで、そのモンスターの守備力は８００ダウンし、戦闘・効果では破壊されない。この効果は相手ターンでも発動できる。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/超重武者装留ファイヤー・アーマー.png"},
+    {"name":"転生炎獣ラクーン","detail":"【 サイバース族 ／ 効果 】","effect":"このカード名の②の効果は１ターンに１度しか使用できない。①：自分の「サラマングレイト」モンスターが相手モンスターの攻撃対象に選択された時、このカードを手札から墓地へ送り、その戦闘を行うモンスター２体を対象として発動できる。対象の相手モンスターの攻撃力分だけ自分のLPを回復する。このターン、対象の自分のモンスターは戦闘では破壊されない。②：このカードが墓地に存在し、自分の「サラマングレイト」モンスターが戦闘で相手モンスターを破壊し墓地へ送った時に発動できる。このカードを手札に加える。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/転生炎獣ラクーン.png"},
+    {"name":"BF－蒼天のジェット","detail":"【 鳥獣族 ／ 効果 】","effect":"戦闘ダメージ計算時、このカードを手札から墓地へ送って発動する。自分フィールド上に存在する「BF」と名のついたモンスターはその戦闘では破壊されない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/BF－蒼天のジェット.png"},
     {"name":"竜剣士マジェスティP","detail":"【 魔法使い族 ／ ペンデュラム ／ 効果 】","effect":"このカード名はルール上「マジェスペクター」カードとしても扱う。このカード名の②のモンスター効果は１ターンに１度しか使用できない。①：このカードを手札から捨てて発動できる。このターン、自分フィールドの「竜剣士」モンスターは相手の効果の対象にならず、相手の効果では破壊されない。この効果は相手ターンでも発動できる。②：このカードがP召喚または「竜剣士」カードの効果で特殊召喚に成功した場合に発動できる。デッキからフィールド魔法カード１枚を手札に加える。その後、自分の手札を１枚選んで捨てる。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/竜剣士マジェスティP.png"},
-    {"name":"タキオン・ギャラクシースパイラル","detail":"罠","text":"このカード名のカードは１ターンに１枚しか発動できない。自分フィールドに「ギャラクシーアイズ・タキオン・ドラゴン」モンスターが存在する場合、このカードの発動は手札からもできる。①：自分フィールドのドラゴン族の「ギャラクシー」モンスター１体を対象として発動できる。その表側表示モンスターはターン終了時まで、戦闘では破壊されず、自身以外のカードの効果を受けない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/タキオン・ギャラクシースパイラル.png"},
-    {"name":"幻煌龍の天渦","detail":"罠","text":"フィールドに「海」が存在する場合、このカードの発動は手札からもできる。①：自分フィールドの「幻煌龍 スパイラル」１体を対象として発動できる。そのモンスターが「幻煌龍」装備魔法カード３種類以上を装備した状態で、戦闘で相手の効果モンスター３体を破壊した時、自分はデュエルに勝利する。②：自分フィールドの通常モンスターが戦闘・効果で破壊される場合、代わりに墓地のこのカードを除外できる。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/幻煌龍の天渦.png"}
+    {"name":"タキオン・ギャラクシースパイラル","detail": "【罠】","effect":"このカード名のカードは１ターンに１枚しか発動できない。自分フィールドに「ギャラクシーアイズ・タキオン・ドラゴン」モンスターが存在する場合、このカードの発動は手札からもできる。①：自分フィールドのドラゴン族の「ギャラクシー」モンスター１体を対象として発動できる。その表側表示モンスターはターン終了時まで、戦闘では破壊されず、自身以外のカードの効果を受けない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/タキオン・ギャラクシースパイラル.png"},
+    {"name":"幻煌龍の天渦","detail": "【罠】","effect":"フィールドに「海」が存在する場合、このカードの発動は手札からもできる。①：自分フィールドの「幻煌龍 スパイラル」１体を対象として発動できる。そのモンスターが「幻煌龍」装備魔法カード３種類以上を装備した状態で、戦闘で相手の効果モンスター３体を破壊した時、自分はデュエルに勝利する。②：自分フィールドの通常モンスターが戦闘・効果で破壊される場合、代わりに墓地のこのカードを除外できる。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/幻煌龍の天渦.png"}
   ]
 );
 //ATK/DEF変更
@@ -1540,7 +1685,7 @@ createThemeBox(
     {"name":"六花精エリカ","detail":"【 植物族 ／ 効果 】","effect":"このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：このカード以外の自分の植物族モンスターが戦闘を行う攻撃宣言時に、手札・フィールドのこのカードをリリースして発動できる。その自分のモンスターの攻撃力・守備力はターン終了時まで１０００アップする。②：このカードが墓地に存在する状態で、自分フィールドの植物族モンスターがリリースされた場合に発動できる。このカードを守備表示で特殊召喚する。この効果で特殊召喚したこのカードは、フィールドから離れた場合に除外される。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/六花精エリカ.png"},
     {"name":"ディサイシブの影霊衣","detail":"【 ドラゴン族 ／ 儀式 ／ 効果 】","effect":"「影霊衣」儀式魔法カードにより降臨。レベル１０以外のモンスターのみを使用した儀式召喚でしか特殊召喚できない。「ディサイシブの影霊衣」の①②の効果はそれぞれ１ターンに１度しか使用できない。①：このカードを手札から捨て、自分フィールドの「影霊衣」モンスター１体を対象として発動できる。そのモンスターの攻撃力・守備力はターン終了時まで１０００アップする。この効果は相手ターンでも発動できる。②：相手フィールドにセットされたカード１枚を対象として発動できる。そのカードを破壊し除外する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ディサイシブの影霊衣.png"},
     {"name":"宝玉の守護者","detail":"【 戦士族 ／ ペンデュラム ／ 効果 】","effect":"①：自分の「宝玉獣」モンスターが相手モンスターと戦闘を行うダメージ計算時、手札・フィールドのこのカードをリリースして発動できる。その戦闘を行う自分のモンスターは、攻撃力・守備力がダメージ計算時のみ元々の数値の倍になり、ダメージステップ終了時に破壊される。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/宝玉の守護者.png"},
-    {"name":"海晶乙女瀑布","detail":"罠","text":"自分フィールドにリンク３以上の「マリンセス」モンスターが存在する場合、このカードの発動は手札からもできる。①：自分フィールドの「マリンセス」リンクモンスターを任意の数だけ次の自分スタンバイフェイズまで除外し、フィールドの表側表示モンスター１体を対象として発動できる。そのモンスターの攻撃力はターン終了時まで、このカードを発動するために除外したリンクモンスターのリンクマーカーの合計×３００アップする。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/海晶乙女瀑布.png"}
+    {"name":"海晶乙女瀑布","detail": "【罠】","effect":"自分フィールドにリンク３以上の「マリンセス」モンスターが存在する場合、このカードの発動は手札からもできる。①：自分フィールドの「マリンセス」リンクモンスターを任意の数だけ次の自分スタンバイフェイズまで除外し、フィールドの表側表示モンスター１体を対象として発動できる。そのモンスターの攻撃力はターン終了時まで、このカードを発動するために除外したリンクモンスターのリンクマーカーの合計×３００アップする。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/海晶乙女瀑布.png"}
   ]
 );
 //その他SS系
@@ -1628,6 +1773,7 @@ createThemeBox(
     {"name":"夢幻吸収体","detail":"【 天使族 ／ 効果 】","effect":"このカード名の①の効果は１ターンに１度しか使用できない。①：相手が手札・墓地・除外状態のモンスターの効果を発動した場合に発動できる。このカードを手札・墓地から特殊召喚する。この効果で特殊召喚したこのカードはエンドフェイズに破壊される。②：このカードがモンスターゾーンに存在する限り、相手がモンスターの効果を発動する度に、このカードの攻撃力は１０００アップする。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/夢幻吸収体.png"},
     {"name":"無限起動ロードローラー","detail":"【 機械族 ／ 効果 】","effect":"このカード名の①の効果は１ターンに１度しか使用できない。①：このカードが手札・墓地に存在し、機械族・地属性モンスターが、リリースされた場合または表側表示で除外された場合に発動できる。このカードを特殊召喚する。この効果で特殊召喚したこのカードは、フィールドから離れた場合に除外される。②：このカードを素材として持っている、元々の種族が機械族のXモンスターは以下の効果を得る。●このカードがモンスターゾーンに存在する限り、相手フィールドの表側表示モンスターは、守備表示になり、守備力は１０００ダウンする。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/無限起動ロードローラー.png"},
     {"name":"冥王竜ヴァンダルギオン","detail":"【 ドラゴン族 ／ 効果 】","effect":"相手がコントロールするカードの発動をカウンター罠で無効にした場合、このカードを手札から特殊召喚する事ができる。この方法で特殊召喚に成功した時、無効にしたカードの種類により以下の効果を発動する。●魔法：相手ライフに１５００ポイントダメージを与える。●罠：相手フィールド上のカード１枚を選択して破壊する。●効果モンスター：自分の墓地からモンスター１体を選択して自分フィールド上に特殊召喚する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/冥王竜ヴァンダルギオン.png"},
+    {"name":"トリックスター・ナルキッス","detail":"【 天使族 ／ 効果 】","effect":"このカード名の①の効果は１ターンに１度しか使用できない。①：相手が効果ダメージを受けた場合に発動できる。このカードを手札から特殊召喚する。②：このカードがモンスターゾーンに存在する限り、相手が手札・墓地のモンスターの効果を発動する度に、相手に２００ダメージを与える。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/トリックスター・ナルキッス.png"},
     {"name":"R－ACEイントルーダー","detail":"【 戦士族 ／ 効果 】","effect":"このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：このカードが召喚・特殊召喚に成功した場合に発動できる。デッキから「R－ACE」罠カード１枚を手札に加える。②：相手がフィールドのモンスターの効果を発動した時、手札・フィールドのこのカードをリリースし、「R－ACEイントルーダー」以外の自分の墓地の「R－ACE」モンスター１体を対象として発動できる。そのモンスターを特殊召喚する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/R－ACEイントルーダー.png"},
     {"name":"R－ACEインパルス","detail":"【 戦士族 ／ 効果 】","effect":"このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：自分メインフェイズに発動できる。相手フィールドの攻撃力が一番高い効果モンスター１体を選ぶ。このターン、そのモンスターはフィールドで発動する効果を発動できない。②：相手がフィールドのモンスターの効果を発動した時、手札・フィールドのこのカードをリリースして発動できる。デッキから機械族の「R－ACE」モンスター１体を特殊召喚する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/R－ACEインパルス.png"},
     {"name":"R－ACEエアホイスター","detail":"【 戦士族 ／ 効果 】","effect":"このカード名の①②の効果はそれぞれ１ターンに１度しか使用できない。①：このカードが召喚・特殊召喚に成功した場合に発動できる。デッキから「R－ACE」魔法カード１枚を手札に加える。②：相手がフィールドのモンスターの効果を発動した時、手札・フィールドのこのカードをリリースして発動できる。手札から「R－ACEエアホイスター」以外の「R－ACE」モンスター１体を特殊召喚する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/R－ACEエアホイスター.png"},
@@ -1653,9 +1799,9 @@ createThemeBox(
     {"name":"DDD極智王カオス・アポカリプス","detail":"【 悪魔族 ／ ペンデュラム ／ 効果 】","effect":"「DDD極智王カオス・アポカリプス」のモンスター効果は１ターンに１度しか使用できず、相手ターンにのみ発動できる。①：このカードが手札・墓地に存在する場合、自分フィールドの表側表示の魔法・罠カード２枚を対象として発動できる。そのカードを破壊し、このカードを特殊召喚する。この効果の発動後、ターン終了時まで自分は悪魔族モンスターしか特殊召喚できない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/DDD極智王カオス・アポカリプス.png"},
     {"name":"マジェスペクター・ポーキュパイン","detail":"【 魔法使い族 ／ ペンデュラム ／ 効果 】","effect":"このカード名の①②のモンスター効果はそれぞれ１ターンに１度しか使用できない。①：自分・相手のメインフェイズに、自分フィールドに「マジェスペクター」モンスターが存在する場合に発動できる。このカードを手札から特殊召喚する。②：このカードが召喚・特殊召喚した場合、自分の墓地の「マジェスペクター」魔法カード１枚を対象として発動できる。そのカードを自分フィールドにセットする。③：このカードがモンスターゾーンに存在する限り、このカードは相手の効果では破壊されず、相手はこのカードを効果の対象にできない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/マジェスペクター・ポーキュパイン.png"},
     {"name":"曲芸の魔術師","detail":"【 魔法使い族 ／ ペンデュラム ／ 効果 】","effect":"①：魔法・罠カードの発動が無効になった場合に発動できる。このカードを手札から特殊召喚する。②：このカードが戦闘で破壊された時に発動できる。このカードを自分のPゾーンに置く。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/曲芸の魔術師.png"},
-    {"name":"ＢＦ－ツインシャドウ","detail":"罠","text":"このカード名のカードは１ターンに１枚しか発動できない。自分フィールドに「BF」モンスターが２体以上存在する場合、このカードの発動は手札からもできる。①：自分の墓地・除外状態の、「BF」チューナー１体とチューナー以外の「BF」モンスター１体をデッキ・EXデッキに戻して発動できる。その２体のレベルの合計と同じレベルを持つ、「BF」Sモンスターか「ブラックフェザー・ドラゴン」１体をS召喚扱いでEXデッキから特殊召喚する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ＢＦ－ツインシャドウ.png"},
-    {"name":"ＮＥＸＴ","detail":"罠","text":"このカード名のカードは１ターンに１枚しか発動できない。自分フィールドにカードが存在しない場合、このカードの発動は手札からもできる。①：自分の手札・墓地から、「N」モンスター及び「E・HERO ネオス」を任意の数だけ選んで守備表示で特殊召喚する（同名カードは１枚まで）。この効果で特殊召喚したモンスターの効果は無効化される。この効果で特殊召喚したモンスターが自分フィールドに表側表示で存在する限り、自分は融合モンスターしかEXデッキから特殊召喚できない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ＮＥＸＴ.png"},
-    {"name":"海晶乙女環流","detail":"罠","text":"自分フィールドにリンク３以上の「マリンセス」モンスターが存在する場合、このカードの発動は手札からもできる。①：自分フィールドの水属性リンクモンスター１体を対象として発動できる。そのモンスターを持ち主のEXデッキに戻し、そのモンスターとはカード名が異なり、リンクマーカーの数が同じ「マリンセス」リンクモンスター１体をリンク召喚扱いとしてEXデッキから特殊召喚する。このターン、この効果で特殊召喚したモンスターは直接攻撃できず、戦闘では破壊されない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/海晶乙女環流.png"}
+    {"name":"ＢＦ－ツインシャドウ","detail": "【罠】","effect":"このカード名のカードは１ターンに１枚しか発動できない。自分フィールドに「BF」モンスターが２体以上存在する場合、このカードの発動は手札からもできる。①：自分の墓地・除外状態の、「BF」チューナー１体とチューナー以外の「BF」モンスター１体をデッキ・EXデッキに戻して発動できる。その２体のレベルの合計と同じレベルを持つ、「BF」Sモンスターか「ブラックフェザー・ドラゴン」１体をS召喚扱いでEXデッキから特殊召喚する。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ＢＦ－ツインシャドウ.png"},
+    {"name":"ＮＥＸＴ","detail": "【罠】","effect":"このカード名のカードは１ターンに１枚しか発動できない。自分フィールドにカードが存在しない場合、このカードの発動は手札からもできる。①：自分の手札・墓地から、「N」モンスター及び「E・HERO ネオス」を任意の数だけ選んで守備表示で特殊召喚する（同名カードは１枚まで）。この効果で特殊召喚したモンスターの効果は無効化される。この効果で特殊召喚したモンスターが自分フィールドに表側表示で存在する限り、自分は融合モンスターしかEXデッキから特殊召喚できない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/ＮＥＸＴ.png"},
+    {"name":"海晶乙女環流","detail": "【罠】","effect":"自分フィールドにリンク３以上の「マリンセス」モンスターが存在する場合、このカードの発動は手札からもできる。①：自分フィールドの水属性リンクモンスター１体を対象として発動できる。そのモンスターを持ち主のEXデッキに戻し、そのモンスターとはカード名が異なり、リンクマーカーの数が同じ「マリンセス」リンクモンスター１体をリンク召喚扱いとしてEXデッキから特殊召喚する。このターン、この効果で特殊召喚したモンスターは直接攻撃できず、戦闘では破壊されない。","cardImageUrl":"https://raw.githubusercontent.com/mirayugioh/allHandTrapList/main/images/海晶乙女環流.png"}
   ]
 );
 //テンプレート
